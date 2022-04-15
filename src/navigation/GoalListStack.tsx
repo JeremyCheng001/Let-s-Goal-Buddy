@@ -3,6 +3,9 @@ import { View, Text, Pressable } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import useColorScheme from "../hooks/useColorScheme";
 import Colors from "../constants/Colors";
+import { Button } from "@ui-kitten/components";
+import { useDispatch } from "react-redux";
+import { increment } from "../store/GoalListReducer";
 
 const GoalListStack = createNativeStackNavigator();
 
@@ -38,9 +41,11 @@ export default function GoalListStackScreen({ navigation }) {
 }
 
 function GoalList() {
+  const dispatch = useDispatch();
   return (
     <View>
       <Text>Goal List</Text>
+      <Button onPress={() => dispatch(increment())}> Set counter</Button>
     </View>
   );
 }

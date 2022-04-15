@@ -14,7 +14,7 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList, RootTabParamList } from "../../types";
 import GoalBuddiesStackScreen from "./GoalBuddiesStack";
 import GoalListStackScreen from "./GoalListStack";
-import SettingsScreen from "./SettingsStack";
+import SettingsStackScreen from "./SettingsStack";
 
 export default function Navigation({
   colorScheme,
@@ -92,7 +92,7 @@ function BottomTabNavigator() {
       ></BottomTab.Screen>
       <BottomTab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={SettingsStackScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => (

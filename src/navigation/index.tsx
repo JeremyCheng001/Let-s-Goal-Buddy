@@ -11,7 +11,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { RootStackParamList, RootTabParamList } from "../types";
+import { RootStackParamList, RootTabParamList } from "../../types";
 import GoalBuddiesStackScreen from "./GoalBuddiesStack";
 import GoalListStackScreen from "./GoalListStack";
 import SettingsScreen from "./SettingsStack";

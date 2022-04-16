@@ -9,6 +9,11 @@ import { ApplicationProvider } from "@ui-kitten/components";
 import { Provider } from "react-redux";
 import { store } from "./src/store/store";
 
+import Amplify,  {API, graphqlOperation} from "aws-amplify";
+import awsconfig from "./src/aws-exports";
+
+Amplify.configure(awsconfig);
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();

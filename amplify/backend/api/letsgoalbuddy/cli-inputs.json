@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "letsgoalbuddy",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/jeremycheng/workspace/Let-s-Goal-Buddy/amplify/backend/api/letsgoalbuddy/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}

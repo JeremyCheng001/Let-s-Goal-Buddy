@@ -1,10 +1,10 @@
 import { Button, List, ListItem } from "@ui-kitten/components";
 import { useDispatch } from "react-redux";
 import { increment } from "../store/GoalListReducer";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Platform, Linking } from "react-native";
 import { listTodos } from "../graphql/queries";
 import { useEffect, useState } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, Auth, graphqlOperation, Hub } from "aws-amplify";
 import {
   CreateTodoInput,
   Todo,
@@ -14,11 +14,15 @@ import {
 import { createTodo, deleteTodo } from "../graphql/mutations";
 import { onCreateTodo, onDeleteTodo } from "../graphql/subscriptions";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
+import * as WebBrowser from "expo-web-browser";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 
 export default function GoalList() {
   const dispatch = useDispatch();
 
   const [todos, setTodos] = useState<(Todo | null)[]>([]);
+
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     (async function getTodos() {
@@ -59,11 +63,51 @@ export default function GoalList() {
       },
     });
 
+    Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          getUser().then((userData) => {
+            console.log("userData");
+            console.log(userData);
+            setUser(userData);
+          });
+          break;
+        case "signOut":
+          console.log("sign out")
+          setUser(null);
+          break;
+        case "signIn_failure":
+        case "cognitoHostedUI_failure":
+          console.log("Sign in failure", data);
+          break;
+      }
+    });
+
+    getUser().then((userData) => setUser(userData));
+
     return () => {
       subscription_createTodo.unsubscribe();
       subscription_deleteTodo.unsubscribe();
     };
   }, []);
+
+  function getUser() {
+    return Auth.currentAuthenticatedUser()
+      .then((userData) => userData)
+      .catch(() => console.log("Not signed in"));
+  }
+
+  // async function urlOpener(url: string, redirectUrl: string) {
+  //   const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
+  //     url,
+  //     redirectUrl
+  //   );
+
+  //   if (type === "success" && Platform.OS === "ios") {
+  //     WebBrowser.dismissBrowser();
+  //     return Linking.openURL(newUrl);
+  //   }
+  // }
 
   const renderListItem = ({
     item,
@@ -115,6 +159,27 @@ export default function GoalList() {
         }}
       >
         delete TODO
+      </Button>
+
+      <Text>User: {user ? JSON.stringify(user.attributes) : "None"}</Text>
+
+      <Button
+        style={{ marginTop: 10 }}
+        onPress={() => {
+          Auth.federatedSignIn({
+            provider: CognitoHostedUIIdentityProvider.Google,
+          });
+        }}
+      >
+        Sign in
+      </Button>
+      <Button
+        style={{ marginTop: 10 }}
+        onPress={() => {
+          Auth.signOut();
+        }}
+      >
+        Sign out
       </Button>
     </View>
   );

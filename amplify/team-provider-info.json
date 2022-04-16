@@ -10,6 +10,11 @@
       "StackName": "amplify-letsgoalbuddy-dev-232534",
       "StackId": "arn:aws:cloudformation:ap-southeast-2:590140829565:stack/amplify-letsgoalbuddy-dev-232534/8a852600-bcbf-11ec-9aed-02522c427d96",
       "AmplifyAppId": "d33mcx0efktzn7"
+    },
+    "categories": {
+      "auth": {
+        "letsgoalbuddy10e47356": {}
+      }
     }
   }
 }

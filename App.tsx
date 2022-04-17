@@ -105,8 +105,16 @@ function App(props: any) {
           dictionaries: [adjectives, animals],
         }); // big_donkey
 
+        /**
+         * appID is some unique string can user can use to find other users/goal buddies, e.g. "L238TPW12"
+         * as DynamoDB does not support auto-increment primary keys due to scaling limitations
+         * we generate a unique ID based on the timestamp. (hopefully it won't have 2 people log in at the same time 🙂)
+         */
+        const appID = new Date().getTime().toString(36).toUpperCase();
+
         const newUserInput: CreateUserInput = {
           id: cognitoUserSubID,
+          appID: appID,
           name: `${randomName}`,
           motto: `I am ${randomName}`,
         };

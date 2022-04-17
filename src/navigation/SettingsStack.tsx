@@ -29,6 +29,7 @@ function Settings() {
           {user.name}
         </Text>
         <Text style={{ marginTop: 10 }}>UserID: {user.id}</Text>
+        <Text style={{ marginTop: 10 }}>AppID: {user.appID}</Text>
       </View>
       <Button
         onPress={() => {

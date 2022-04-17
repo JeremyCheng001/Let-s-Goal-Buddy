@@ -11,6 +11,7 @@ type Todo @model {
 
 type User @model {
   id: ID!
+  appID: String! 
   name: String!
   imageUrl: String
   motto: String

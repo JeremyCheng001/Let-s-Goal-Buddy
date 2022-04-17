@@ -81,12 +81,14 @@ export type DeleteTodoInput = {
 
 export type CreateUserInput = {
   id?: string | null,
+  appID: string,
   name: string,
   imageUrl?: string | null,
   motto?: string | null,
 };
 
 export type ModelUserConditionInput = {
+  appID?: ModelStringInput | null,
   name?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   motto?: ModelStringInput | null,
@@ -98,6 +100,7 @@ export type ModelUserConditionInput = {
 export type User = {
   __typename: "User",
   id: string,
+  appID: string,
   name: string,
   imageUrl?: string | null,
   motto?: string | null,
@@ -107,6 +110,7 @@ export type User = {
 
 export type UpdateUserInput = {
   id: string,
+  appID?: string | null,
   name?: string | null,
   imageUrl?: string | null,
   motto?: string | null,
@@ -150,6 +154,7 @@ export type ModelTodoConnection = {
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
+  appID?: ModelStringInput | null,
   name?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   motto?: ModelStringInput | null,
@@ -224,6 +229,7 @@ export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -241,6 +247,7 @@ export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -258,6 +265,7 @@ export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -312,6 +320,7 @@ export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -332,6 +341,7 @@ export type ListUsersQuery = {
     items:  Array< {
       __typename: "User",
       id: string,
+      appID: string,
       name: string,
       imageUrl?: string | null,
       motto?: string | null,
@@ -382,6 +392,7 @@ export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -394,6 +405,7 @@ export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -406,6 +418,7 @@ export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
     id: string,
+    appID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,

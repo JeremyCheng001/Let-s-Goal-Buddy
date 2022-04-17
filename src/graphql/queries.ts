@@ -37,6 +37,7 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
+      appID
       name
       imageUrl
       motto
@@ -54,6 +55,7 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        appID
         name
         imageUrl
         motto

@@ -6,6 +6,7 @@ export interface UserState extends User {}
 const initialState: UserState = {
   __typename: "User",
   id: "-1",
+  appID: "-1",
   name: "",
   createdAt: "",
   updatedAt: "",
@@ -16,9 +17,10 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserState>) => {
-      const { id, name, motto, imageUrl, createdAt, updatedAt } =
+      const { id, appID, name, motto, imageUrl, createdAt, updatedAt } =
         action.payload;
       state.id = id;
+      state.appID = appID;
       state.name = name;
       state.motto = motto;
       state.imageUrl = imageUrl;

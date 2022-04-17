@@ -104,8 +104,49 @@ export type User = {
   name: string,
   imageUrl?: string | null,
   motto?: string | null,
+  goalList?: ModelGoalListConnection | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelGoalListConnection = {
+  __typename: "ModelGoalListConnection",
+  items:  Array<GoalList | null >,
+  nextToken?: string | null,
+};
+
+export type GoalList = {
+  __typename: "GoalList",
+  id: string,
+  type: number,
+  startDate: string,
+  endDate: string,
+  user?: User | null,
+  goals?: ModelGoalConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  userGoalListId?: string | null,
+};
+
+export type ModelGoalConnection = {
+  __typename: "ModelGoalConnection",
+  items:  Array<Goal | null >,
+  nextToken?: string | null,
+};
+
+export type Goal = {
+  __typename: "Goal",
+  id: string,
+  title: string,
+  type: number,
+  description?: string | null,
+  startDateTime?: string | null,
+  endDateTime?: string | null,
+  progress?: number | null,
+  goalList?: GoalList | null,
+  createdAt: string,
+  updatedAt: string,
+  goalListGoalsId?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -120,14 +161,34 @@ export type DeleteUserInput = {
   id: string,
 };
 
-export type ModelTodoFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  priority?: ModelStringInput | null,
-  and?: Array< ModelTodoFilterInput | null > | null,
-  or?: Array< ModelTodoFilterInput | null > | null,
-  not?: ModelTodoFilterInput | null,
+export type CreateGoalListInput = {
+  id?: string | null,
+  type: number,
+  startDate: string,
+  endDate: string,
+  userGoalListId?: string | null,
+};
+
+export type ModelGoalListConditionInput = {
+  type?: ModelIntInput | null,
+  startDate?: ModelStringInput | null,
+  endDate?: ModelStringInput | null,
+  and?: Array< ModelGoalListConditionInput | null > | null,
+  or?: Array< ModelGoalListConditionInput | null > | null,
+  not?: ModelGoalListConditionInput | null,
+  userGoalListId?: ModelIDInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ModelIDInput = {
@@ -144,6 +205,67 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
+};
+
+export type UpdateGoalListInput = {
+  id: string,
+  type?: number | null,
+  startDate?: string | null,
+  endDate?: string | null,
+  userGoalListId?: string | null,
+};
+
+export type DeleteGoalListInput = {
+  id: string,
+};
+
+export type CreateGoalInput = {
+  id?: string | null,
+  title: string,
+  type: number,
+  description?: string | null,
+  startDateTime?: string | null,
+  endDateTime?: string | null,
+  progress?: number | null,
+  goalListGoalsId?: string | null,
+};
+
+export type ModelGoalConditionInput = {
+  title?: ModelStringInput | null,
+  type?: ModelIntInput | null,
+  description?: ModelStringInput | null,
+  startDateTime?: ModelStringInput | null,
+  endDateTime?: ModelStringInput | null,
+  progress?: ModelIntInput | null,
+  and?: Array< ModelGoalConditionInput | null > | null,
+  or?: Array< ModelGoalConditionInput | null > | null,
+  not?: ModelGoalConditionInput | null,
+  goalListGoalsId?: ModelIDInput | null,
+};
+
+export type UpdateGoalInput = {
+  id: string,
+  title?: string | null,
+  type?: number | null,
+  description?: string | null,
+  startDateTime?: string | null,
+  endDateTime?: string | null,
+  progress?: number | null,
+  goalListGoalsId?: string | null,
+};
+
+export type DeleteGoalInput = {
+  id: string,
+};
+
+export type ModelTodoFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  priority?: ModelStringInput | null,
+  and?: Array< ModelTodoFilterInput | null > | null,
+  or?: Array< ModelTodoFilterInput | null > | null,
+  not?: ModelTodoFilterInput | null,
 };
 
 export type ModelTodoConnection = {
@@ -167,6 +289,31 @@ export type ModelUserConnection = {
   __typename: "ModelUserConnection",
   items:  Array<User | null >,
   nextToken?: string | null,
+};
+
+export type ModelGoalListFilterInput = {
+  id?: ModelIDInput | null,
+  type?: ModelIntInput | null,
+  startDate?: ModelStringInput | null,
+  endDate?: ModelStringInput | null,
+  and?: Array< ModelGoalListFilterInput | null > | null,
+  or?: Array< ModelGoalListFilterInput | null > | null,
+  not?: ModelGoalListFilterInput | null,
+  userGoalListId?: ModelIDInput | null,
+};
+
+export type ModelGoalFilterInput = {
+  id?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  type?: ModelIntInput | null,
+  description?: ModelStringInput | null,
+  startDateTime?: ModelStringInput | null,
+  endDateTime?: ModelStringInput | null,
+  progress?: ModelIntInput | null,
+  and?: Array< ModelGoalFilterInput | null > | null,
+  or?: Array< ModelGoalFilterInput | null > | null,
+  not?: ModelGoalFilterInput | null,
+  goalListGoalsId?: ModelIDInput | null,
 };
 
 export type CreateTodoMutationVariables = {
@@ -233,6 +380,20 @@ export type CreateUserMutation = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -251,6 +412,20 @@ export type UpdateUserMutation = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -269,8 +444,304 @@ export type DeleteUserMutation = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type CreateGoalListMutationVariables = {
+  input: CreateGoalListInput,
+  condition?: ModelGoalListConditionInput | null,
+};
+
+export type CreateGoalListMutation = {
+  createGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type UpdateGoalListMutationVariables = {
+  input: UpdateGoalListInput,
+  condition?: ModelGoalListConditionInput | null,
+};
+
+export type UpdateGoalListMutation = {
+  updateGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type DeleteGoalListMutationVariables = {
+  input: DeleteGoalListInput,
+  condition?: ModelGoalListConditionInput | null,
+};
+
+export type DeleteGoalListMutation = {
+  deleteGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type CreateGoalMutationVariables = {
+  input: CreateGoalInput,
+  condition?: ModelGoalConditionInput | null,
+};
+
+export type CreateGoalMutation = {
+  createGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type UpdateGoalMutationVariables = {
+  input: UpdateGoalInput,
+  condition?: ModelGoalConditionInput | null,
+};
+
+export type UpdateGoalMutation = {
+  updateGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type DeleteGoalMutationVariables = {
+  input: DeleteGoalInput,
+  condition?: ModelGoalConditionInput | null,
+};
+
+export type DeleteGoalMutation = {
+  deleteGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
   } | null,
 };
 
@@ -324,6 +795,20 @@ export type GetUserQuery = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -345,8 +830,177 @@ export type ListUsersQuery = {
       name: string,
       imageUrl?: string | null,
       motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetGoalListQueryVariables = {
+  id: string,
+};
+
+export type GetGoalListQuery = {
+  getGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type ListGoalListsQueryVariables = {
+  filter?: ModelGoalListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListGoalListsQuery = {
+  listGoalLists?:  {
+    __typename: "ModelGoalListConnection",
+    items:  Array< {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetGoalQueryVariables = {
+  id: string,
+};
+
+export type GetGoalQuery = {
+  getGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type ListGoalsQueryVariables = {
+  filter?: ModelGoalFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListGoalsQuery = {
+  listGoals?:  {
+    __typename: "ModelGoalConnection",
+    items:  Array< {
+      __typename: "Goal",
+      id: string,
+      title: string,
+      type: number,
+      description?: string | null,
+      startDateTime?: string | null,
+      endDateTime?: string | null,
+      progress?: number | null,
+      goalList?:  {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      goalListGoalsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -396,6 +1050,20 @@ export type OnCreateUserSubscription = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -409,6 +1077,20 @@ export type OnUpdateUserSubscription = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -422,7 +1104,273 @@ export type OnDeleteUserSubscription = {
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
+    goalList?:  {
+      __typename: "ModelGoalListConnection",
+      items:  Array< {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type OnCreateGoalListSubscription = {
+  onCreateGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type OnUpdateGoalListSubscription = {
+  onUpdateGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type OnDeleteGoalListSubscription = {
+  onDeleteGoalList?:  {
+    __typename: "GoalList",
+    id: string,
+    type: number,
+    startDate: string,
+    endDate: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    goals?:  {
+      __typename: "ModelGoalConnection",
+      items:  Array< {
+        __typename: "Goal",
+        id: string,
+        title: string,
+        type: number,
+        description?: string | null,
+        startDateTime?: string | null,
+        endDateTime?: string | null,
+        progress?: number | null,
+        createdAt: string,
+        updatedAt: string,
+        goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    userGoalListId?: string | null,
+  } | null,
+};
+
+export type OnCreateGoalSubscription = {
+  onCreateGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type OnUpdateGoalSubscription = {
+  onUpdateGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type OnDeleteGoalSubscription = {
+  onDeleteGoal?:  {
+    __typename: "Goal",
+    id: string,
+    title: string,
+    type: number,
+    description?: string | null,
+    startDateTime?: string | null,
+    endDateTime?: string | null,
+    progress?: number | null,
+    goalList?:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    goalListGoalsId?: string | null,
   } | null,
 };

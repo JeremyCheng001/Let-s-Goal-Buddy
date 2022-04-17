@@ -58,6 +58,18 @@ export const createUser = /* GraphQL */ `
       name
       imageUrl
       motto
+      goalList {
+        items {
+          id
+          type
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userGoalListId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -74,6 +86,18 @@ export const updateUser = /* GraphQL */ `
       name
       imageUrl
       motto
+      goalList {
+        items {
+          id
+          type
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userGoalListId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -90,8 +114,269 @@ export const deleteUser = /* GraphQL */ `
       name
       imageUrl
       motto
+      goalList {
+        items {
+          id
+          type
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userGoalListId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
+    }
+  }
+`;
+export const createGoalList = /* GraphQL */ `
+  mutation CreateGoalList(
+    $input: CreateGoalListInput!
+    $condition: ModelGoalListConditionInput
+  ) {
+    createGoalList(input: $input, condition: $condition) {
+      id
+      type
+      startDate
+      endDate
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goals {
+        items {
+          id
+          title
+          type
+          description
+          startDateTime
+          endDateTime
+          progress
+          createdAt
+          updatedAt
+          goalListGoalsId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      userGoalListId
+    }
+  }
+`;
+export const updateGoalList = /* GraphQL */ `
+  mutation UpdateGoalList(
+    $input: UpdateGoalListInput!
+    $condition: ModelGoalListConditionInput
+  ) {
+    updateGoalList(input: $input, condition: $condition) {
+      id
+      type
+      startDate
+      endDate
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goals {
+        items {
+          id
+          title
+          type
+          description
+          startDateTime
+          endDateTime
+          progress
+          createdAt
+          updatedAt
+          goalListGoalsId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      userGoalListId
+    }
+  }
+`;
+export const deleteGoalList = /* GraphQL */ `
+  mutation DeleteGoalList(
+    $input: DeleteGoalListInput!
+    $condition: ModelGoalListConditionInput
+  ) {
+    deleteGoalList(input: $input, condition: $condition) {
+      id
+      type
+      startDate
+      endDate
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goals {
+        items {
+          id
+          title
+          type
+          description
+          startDateTime
+          endDateTime
+          progress
+          createdAt
+          updatedAt
+          goalListGoalsId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      userGoalListId
+    }
+  }
+`;
+export const createGoal = /* GraphQL */ `
+  mutation CreateGoal(
+    $input: CreateGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    createGoal(input: $input, condition: $condition) {
+      id
+      title
+      type
+      description
+      startDateTime
+      endDateTime
+      progress
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+      goalListGoalsId
+    }
+  }
+`;
+export const updateGoal = /* GraphQL */ `
+  mutation UpdateGoal(
+    $input: UpdateGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    updateGoal(input: $input, condition: $condition) {
+      id
+      title
+      type
+      description
+      startDateTime
+      endDateTime
+      progress
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+      goalListGoalsId
+    }
+  }
+`;
+export const deleteGoal = /* GraphQL */ `
+  mutation DeleteGoal(
+    $input: DeleteGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    deleteGoal(input: $input, condition: $condition) {
+      id
+      title
+      type
+      description
+      startDateTime
+      endDateTime
+      progress
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+      goalListGoalsId
     }
   }
 `;

@@ -41,6 +41,18 @@ export const getUser = /* GraphQL */ `
       name
       imageUrl
       motto
+      goalList {
+        items {
+          id
+          type
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userGoalListId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -59,8 +71,152 @@ export const listUsers = /* GraphQL */ `
         name
         imageUrl
         motto
+        goalList {
+          nextToken
+        }
         createdAt
         updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGoalList = /* GraphQL */ `
+  query GetGoalList($id: ID!) {
+    getGoalList(id: $id) {
+      id
+      type
+      startDate
+      endDate
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goals {
+        items {
+          id
+          title
+          type
+          description
+          startDateTime
+          endDateTime
+          progress
+          createdAt
+          updatedAt
+          goalListGoalsId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      userGoalListId
+    }
+  }
+`;
+export const listGoalLists = /* GraphQL */ `
+  query ListGoalLists(
+    $filter: ModelGoalListFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGoalLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      nextToken
+    }
+  }
+`;
+export const getGoal = /* GraphQL */ `
+  query GetGoal($id: ID!) {
+    getGoal(id: $id) {
+      id
+      title
+      type
+      description
+      startDateTime
+      endDateTime
+      progress
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+      goalListGoalsId
+    }
+  }
+`;
+export const listGoals = /* GraphQL */ `
+  query ListGoals(
+    $filter: ModelGoalFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGoals(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        type
+        description
+        startDateTime
+        endDateTime
+        progress
+        goalList {
+          id
+          type
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          userGoalListId
+        }
+        createdAt
+        updatedAt
+        goalListGoalsId
       }
       nextToken
     }

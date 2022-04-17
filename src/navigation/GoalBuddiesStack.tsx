@@ -7,7 +7,7 @@ const GoalBuddiesStack = createNativeStackNavigator();
 export default function GoalBuddiesStackScreen() {
   return (
     <GoalBuddiesStack.Navigator>
-      <GoalBuddiesStack.Screen name="Goal Buddies" component={GoalBuddies} />
+      <GoalBuddiesStack.Screen name="My Goal Buddies" component={GoalBuddies} />
     </GoalBuddiesStack.Navigator>
   );
 }

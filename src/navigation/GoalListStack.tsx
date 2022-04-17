@@ -14,7 +14,7 @@ export default function GoalListStackScreen({ navigation }) {
   return (
     <GoalListStack.Navigator>
       <GoalListStack.Screen
-        name="Goal List"
+        name="My Goal List"
         component={GoalList}
         options={{
           headerRight: () => (

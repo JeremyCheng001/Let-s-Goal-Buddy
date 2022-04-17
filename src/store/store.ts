@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import GoalListReducer from "./GoalListReducer";
+import UserReducer from "./UserReducer";
 
 export const store = configureStore({
   reducer: {
+    userReducer: UserReducer,
     goalListReducer: GoalListReducer,
   },
 });

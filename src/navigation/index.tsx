@@ -55,19 +55,19 @@ function RootNavigator() {
   );
 }
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const BottomTab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   return (
     <BottomTab.Navigator
-      initialRouteName="GoalList"
+      initialRouteName="Goal List"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
       <BottomTab.Screen
-        name="GoalList"
+        name="Goal List"
         component={GoalListStackScreen}
         options={{
           headerShown: false,
@@ -77,7 +77,7 @@ function BottomTabNavigator() {
         }}
       ></BottomTab.Screen>
       <BottomTab.Screen
-        name="GoalBuddies"
+        name="Goal Buddies"
         component={GoalBuddiesStackScreen}
         options={{
           headerShown: false,

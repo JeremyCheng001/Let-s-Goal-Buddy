@@ -42,7 +42,6 @@ export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
       id
-      cognitoUserID
       name
       imageUrl
       motto
@@ -55,7 +54,6 @@ export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser {
     onUpdateUser {
       id
-      cognitoUserID
       name
       imageUrl
       motto
@@ -68,7 +66,6 @@ export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser {
     onDeleteUser {
       id
-      cognitoUserID
       name
       imageUrl
       motto

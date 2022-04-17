@@ -37,7 +37,6 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
-      cognitoUserID
       name
       imageUrl
       motto
@@ -55,35 +54,6 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        cognitoUserID
-        name
-        imageUrl
-        motto
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const userByCognitoUser = /* GraphQL */ `
-  query UserByCognitoUser(
-    $cognitoUserID: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    userByCognitoUser(
-      cognitoUserID: $cognitoUserID
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        cognitoUserID
         name
         imageUrl
         motto

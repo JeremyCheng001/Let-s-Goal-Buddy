@@ -81,14 +81,12 @@ export type DeleteTodoInput = {
 
 export type CreateUserInput = {
   id?: string | null,
-  cognitoUserID: string,
   name: string,
   imageUrl?: string | null,
   motto?: string | null,
 };
 
 export type ModelUserConditionInput = {
-  cognitoUserID?: ModelIDInput | null,
   name?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   motto?: ModelStringInput | null,
@@ -97,26 +95,9 @@ export type ModelUserConditionInput = {
   not?: ModelUserConditionInput | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type User = {
   __typename: "User",
   id: string,
-  cognitoUserID: string,
   name: string,
   imageUrl?: string | null,
   motto?: string | null,
@@ -126,7 +107,6 @@ export type User = {
 
 export type UpdateUserInput = {
   id: string,
-  cognitoUserID?: string | null,
   name?: string | null,
   imageUrl?: string | null,
   motto?: string | null,
@@ -146,6 +126,22 @@ export type ModelTodoFilterInput = {
   not?: ModelTodoFilterInput | null,
 };
 
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type ModelTodoConnection = {
   __typename: "ModelTodoConnection",
   items:  Array<Todo | null >,
@@ -154,7 +150,6 @@ export type ModelTodoConnection = {
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
-  cognitoUserID?: ModelIDInput | null,
   name?: ModelStringInput | null,
   imageUrl?: ModelStringInput | null,
   motto?: ModelStringInput | null,
@@ -168,12 +163,6 @@ export type ModelUserConnection = {
   items:  Array<User | null >,
   nextToken?: string | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type CreateTodoMutationVariables = {
   input: CreateTodoInput,
@@ -235,7 +224,6 @@ export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -253,7 +241,6 @@ export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -271,7 +258,6 @@ export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -326,7 +312,6 @@ export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -347,32 +332,6 @@ export type ListUsersQuery = {
     items:  Array< {
       __typename: "User",
       id: string,
-      cognitoUserID: string,
-      name: string,
-      imageUrl?: string | null,
-      motto?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UserByCognitoUserQueryVariables = {
-  cognitoUserID: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UserByCognitoUserQuery = {
-  userByCognitoUser?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      cognitoUserID: string,
       name: string,
       imageUrl?: string | null,
       motto?: string | null,
@@ -423,7 +382,6 @@ export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -436,7 +394,6 @@ export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,
@@ -449,7 +406,6 @@ export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
     id: string,
-    cognitoUserID: string,
     name: string,
     imageUrl?: string | null,
     motto?: string | null,

@@ -28,8 +28,7 @@ function Settings() {
         <Text style={{ marginTop: 10 }} category={"h6"}>
           {user.name}
         </Text>
-        <Text style={{ marginTop: 10 }}>UserID in App: {user.id}</Text>
-        <Text>UserID in Cognito: {user.cognitoUserID}</Text>
+        <Text style={{ marginTop: 10 }}>UserID: {user.id}</Text>
       </View>
       <Button
         onPress={() => {

@@ -22,15 +22,11 @@ import {
   animals,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import {
-  CreateUserInput,
-  CreateUserMutation,
-  UserByCognitoUserQuery,
-} from "./src/API";
+import { CreateUserInput, CreateUserMutation, GetUserQuery } from "./src/API";
 import awsconfig from "./src/aws-exports";
 import { View } from "./src/components/Themed";
 import { createUser } from "./src/graphql/mutations";
-import { userByCognitoUser } from "./src/graphql/queries";
+import { getUser } from "./src/graphql/queries";
 import useCachedResources from "./src/hooks/useCachedResources";
 import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
@@ -99,32 +95,27 @@ function App(props: any) {
     if (oAuthUser && oAuthUser.attributes && oAuthUser.attributes.sub) {
       const cognitoUserSubID = oAuthUser.attributes.sub;
       const resp = (await API.graphql(
-        graphqlOperation(userByCognitoUser, { cognitoUserID: cognitoUserSubID })
-      )) as GraphQLResult<UserByCognitoUserQuery>;
-      if (resp.data?.userByCognitoUser?.items) {
-        if (resp.data.userByCognitoUser.items.length === 0) {
-          // if there is no user record in our DynamoDB, we create a new user for the newly sign-in user
-          const randomName = uniqueNamesGenerator({
-            dictionaries: [adjectives, animals],
-          }); // big_donkey
+        graphqlOperation(getUser, { id: cognitoUserSubID })
+      )) as GraphQLResult<GetUserQuery>;
+      if (resp.data?.getUser) {
+        store.dispatch(setUser(resp.data.getUser));
+      } else {
+        // if there is no user record in our DynamoDB, we create a new user for the newly sign-in user
+        const randomName = uniqueNamesGenerator({
+          dictionaries: [adjectives, animals],
+        }); // big_donkey
 
-          const newUserInput: CreateUserInput = {
-            cognitoUserID: cognitoUserSubID,
-            name: `${randomName}`,
-            motto: `I am ${randomName}`,
-          };
-          const newUser = (await API.graphql(
-            graphqlOperation(createUser, { input: newUserInput })
-          )) as GraphQLResult<CreateUserMutation>;
+        const newUserInput: CreateUserInput = {
+          id: cognitoUserSubID,
+          name: `${randomName}`,
+          motto: `I am ${randomName}`,
+        };
+        const newUser = (await API.graphql(
+          graphqlOperation(createUser, { input: newUserInput })
+        )) as GraphQLResult<CreateUserMutation>;
 
-          if (newUser.data?.createUser) {
-            store.dispatch(setUser(newUser.data.createUser));
-          }
-        } else {
-          const user = resp.data.userByCognitoUser.items[0];
-          if (user) {
-            store.dispatch(setUser(user));
-          }
+        if (newUser.data?.createUser) {
+          store.dispatch(setUser(newUser.data.createUser));
         }
       }
     }

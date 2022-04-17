@@ -54,7 +54,6 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       id
-      cognitoUserID
       name
       imageUrl
       motto
@@ -70,7 +69,6 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       id
-      cognitoUserID
       name
       imageUrl
       motto
@@ -86,7 +84,6 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       id
-      cognitoUserID
       name
       imageUrl
       motto

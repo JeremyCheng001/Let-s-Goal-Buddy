@@ -16,6 +16,9 @@ export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
+    resetUser: (state) => {
+      return { ...initialState };
+    },
     setUser: (state, action: PayloadAction<UserState>) => {
       const { id, appID, name, motto, imageUrl, createdAt, updatedAt } =
         action.payload;
@@ -30,6 +33,6 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { setUser } = counterSlice.actions;
+export const { resetUser, setUser } = counterSlice.actions;
 
 export default counterSlice.reducer;

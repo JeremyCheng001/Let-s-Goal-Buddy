@@ -1,34 +1,34 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Goal, GoalList } from "../API";
 
-export interface CounterState {
-  value: number
+export interface GoalListReducer {
+  selectedGoalList: GoalList | null;
 }
 
-const initialState: CounterState = {
-  value: 0,
-}
+const initialState: GoalListReducer = {
+  selectedGoalList: null,
+};
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const goalListSlice = createSlice({
+  name: "counter",
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    resetGoalListReducer: (state) => {
+      state.selectedGoalList = null;
     },
-    decrement: (state) => {
-      state.value -= 1
+    setSelectedGoalList: (state, action: PayloadAction<GoalList | null>) => {
+      state.selectedGoalList = action.payload;
     },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload
+
+    addNewGoalToList: (state, action: PayloadAction<Goal>) => {
+      if (state.selectedGoalList) {
+        state.selectedGoalList.goals?.items.unshift(action.payload);
+      }
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { resetGoalListReducer, setSelectedGoalList, addNewGoalToList } = goalListSlice.actions;
 
-export default counterSlice.reducer
+export default goalListSlice.reducer;

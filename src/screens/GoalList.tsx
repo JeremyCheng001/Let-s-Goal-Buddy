@@ -10,7 +10,7 @@ import {
   Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
-import { trim } from "lodash";
+import { reverse, sortBy, trim } from "lodash";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Pressable, ScrollView, View } from "react-native";
@@ -32,6 +32,7 @@ import { createGoal, createGoalList } from "../graphql/mutations";
 import { getGoalList, listGoalLists } from "../graphql/queries";
 import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
+import * as Progress from "react-native-progress";
 
 const DateTypes = [
   "Daily Goals",
@@ -244,9 +245,19 @@ export default function GoalListScreen({ navigation }) {
     if (!selectedGoalList) return null;
 
     if (selectedGoalList?.goals?.items.length === 0) return null;
+
+    let goals = [...(selectedGoalList?.goals?.items || [])];
+    // sort goals that they are listed based on the order when it is created
+    goals.sort((a: Goal | null, b: Goal | null) => {
+      if (a && b) {
+        return moment(b.createdAt).unix() - moment(a.createdAt).unix();
+      }
+      return -1;
+    });
+
     return (
       <ScrollView style={{ flex: 1 }}>
-        {selectedGoalList.goals?.items.map((goal) => (
+        {goals.map((goal) => (
           <View
             key={goal?.id}
             style={{
@@ -260,11 +271,11 @@ export default function GoalListScreen({ navigation }) {
                 size={32}
                 fillColor="black"
                 unfillColor="#FFFFFF"
-                // text={goal?.title}
                 iconStyle={{ borderColor: "black", borderRadius: 5 }}
                 onPress={(isChecked: boolean) => {}}
               />
               <Pressable
+                style={{ flex: 1 }}
                 onPress={() => handleNavigateToGoalDetailsScreen(goal)}
               >
                 <Text

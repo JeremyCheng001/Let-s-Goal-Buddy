@@ -7,13 +7,13 @@ import {
   Input,
   Select,
   SelectItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,10 +21,13 @@ import {
   CreateGoalListInput,
   CreateGoalListMutation,
   CreateGoalMutation,
-  GetGoalListQuery, Goal,
+  GetGoalListQuery,
+  Goal,
   GoalList,
-  ListGoalListsQuery, User
+  ListGoalListsQuery,
+  User,
 } from "../API";
+import Row from "../components/Row";
 import { createGoal, createGoalList } from "../graphql/mutations";
 import { getGoalList, listGoalLists } from "../graphql/queries";
 import * as GoalListReducer from "../store/GoalListReducer";
@@ -37,7 +40,8 @@ const DateTypes = [
   "Yearly Goals",
 ];
 
-export default function GoalListScreen() {
+// @ts-ignore
+export default function GoalListScreen({ navigation }) {
   const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.userReducer);
   const selectedGoalList: GoalList | null = useSelector(
@@ -103,7 +107,6 @@ export default function GoalListScreen() {
   useEffect(() => {
     fetchGoalList();
   }, [startDateStr, selectedDateTypeIndex.row, user.id]);
-
 
   const renderDates = () => {
     return (
@@ -230,6 +233,13 @@ export default function GoalListScreen() {
     setNewGoalTitle("");
   }
 
+  function handleNavigateToGoalDetailsScreen(goal: Goal | null) {
+    if (goal) {
+      dispatch(GoalListReducer.setSelectedGoal(goal));
+      navigation.push("Goal Details");
+    }
+  }
+
   const renderGoalList = () => {
     if (!selectedGoalList) return null;
 
@@ -245,16 +255,25 @@ export default function GoalListScreen() {
               marginBottom: 12,
             }}
           >
-            <View>
+            <Row>
               <BouncyCheckbox
                 size={32}
                 fillColor="black"
                 unfillColor="#FFFFFF"
-                text={goal?.title}
+                // text={goal?.title}
                 iconStyle={{ borderColor: "black", borderRadius: 5 }}
                 onPress={(isChecked: boolean) => {}}
               />
-            </View>
+              <Pressable
+                onPress={() => handleNavigateToGoalDetailsScreen(goal)}
+              >
+                <Text
+                  style={{ fontSize: 20, textDecorationLine: "line-through" }}
+                >
+                  {goal?.title}
+                </Text>
+              </Pressable>
+            </Row>
           </View>
         ))}
       </ScrollView>
@@ -318,6 +337,7 @@ export default function GoalListScreen() {
           style={{ width: 200, alignSelf: "center", marginTop: 10 }}
           accessoryLeft={<Icon name="plus" />}
           onPress={() => {
+            setSelectingDate(false);
             setAddingNewGoal(true);
             if (inputEl && inputEl.current) {
               (inputEl.current as any).focus();

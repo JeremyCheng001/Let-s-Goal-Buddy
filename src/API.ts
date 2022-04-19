@@ -143,6 +143,7 @@ export type Goal = {
   startDateTime?: string | null,
   endDateTime?: string | null,
   progress?: number | null,
+  completed?: boolean | null,
   goalList?: GoalList | null,
   createdAt: string,
   updatedAt: string,
@@ -227,6 +228,7 @@ export type CreateGoalInput = {
   startDateTime?: string | null,
   endDateTime?: string | null,
   progress?: number | null,
+  completed?: boolean | null,
   goalListGoalsId?: string | null,
 };
 
@@ -237,10 +239,18 @@ export type ModelGoalConditionInput = {
   startDateTime?: ModelStringInput | null,
   endDateTime?: ModelStringInput | null,
   progress?: ModelIntInput | null,
+  completed?: ModelBooleanInput | null,
   and?: Array< ModelGoalConditionInput | null > | null,
   or?: Array< ModelGoalConditionInput | null > | null,
   not?: ModelGoalConditionInput | null,
   goalListGoalsId?: ModelIDInput | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type UpdateGoalInput = {
@@ -251,6 +261,7 @@ export type UpdateGoalInput = {
   startDateTime?: string | null,
   endDateTime?: string | null,
   progress?: number | null,
+  completed?: boolean | null,
   goalListGoalsId?: string | null,
 };
 
@@ -310,6 +321,7 @@ export type ModelGoalFilterInput = {
   startDateTime?: ModelStringInput | null,
   endDateTime?: ModelStringInput | null,
   progress?: ModelIntInput | null,
+  completed?: ModelBooleanInput | null,
   and?: Array< ModelGoalFilterInput | null > | null,
   or?: Array< ModelGoalFilterInput | null > | null,
   not?: ModelGoalFilterInput | null,
@@ -500,6 +512,7 @@ export type CreateGoalListMutation = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -549,6 +562,7 @@ export type UpdateGoalListMutation = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -598,6 +612,7 @@ export type DeleteGoalListMutation = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -625,6 +640,7 @@ export type CreateGoalMutation = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -670,6 +686,7 @@ export type UpdateGoalMutation = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -715,6 +732,7 @@ export type DeleteGoalMutation = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -877,6 +895,7 @@ export type GetGoalListQuery = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -940,6 +959,7 @@ export type GetGoalQuery = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -988,6 +1008,7 @@ export type ListGoalsQuery = {
       startDateTime?: string | null,
       endDateTime?: string | null,
       progress?: number | null,
+      completed?: boolean | null,
       goalList?:  {
         __typename: "GoalList",
         id: string,
@@ -1155,6 +1176,7 @@ export type OnCreateGoalListSubscription = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -1199,6 +1221,7 @@ export type OnUpdateGoalListSubscription = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -1243,6 +1266,7 @@ export type OnDeleteGoalListSubscription = {
         startDateTime?: string | null,
         endDateTime?: string | null,
         progress?: number | null,
+        completed?: boolean | null,
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
@@ -1265,6 +1289,7 @@ export type OnCreateGoalSubscription = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -1305,6 +1330,7 @@ export type OnUpdateGoalSubscription = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,
@@ -1345,6 +1371,7 @@ export type OnDeleteGoalSubscription = {
     startDateTime?: string | null,
     endDateTime?: string | null,
     progress?: number | null,
+    completed?: boolean | null,
     goalList?:  {
       __typename: "GoalList",
       id: string,

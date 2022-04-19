@@ -162,6 +162,7 @@ export const createGoalList = /* GraphQL */ `
           startDateTime
           endDateTime
           progress
+          completed
           createdAt
           updatedAt
           goalListGoalsId
@@ -205,6 +206,7 @@ export const updateGoalList = /* GraphQL */ `
           startDateTime
           endDateTime
           progress
+          completed
           createdAt
           updatedAt
           goalListGoalsId
@@ -248,6 +250,7 @@ export const deleteGoalList = /* GraphQL */ `
           startDateTime
           endDateTime
           progress
+          completed
           createdAt
           updatedAt
           goalListGoalsId
@@ -273,6 +276,7 @@ export const createGoal = /* GraphQL */ `
       startDateTime
       endDateTime
       progress
+      completed
       goalList {
         id
         type
@@ -313,6 +317,7 @@ export const updateGoal = /* GraphQL */ `
       startDateTime
       endDateTime
       progress
+      completed
       goalList {
         id
         type
@@ -353,6 +358,7 @@ export const deleteGoal = /* GraphQL */ `
       startDateTime
       endDateTime
       progress
+      completed
       goalList {
         id
         type

@@ -25,10 +25,12 @@ import {
   Goal,
   GoalList,
   ListGoalListsQuery,
+  UpdateGoalInput,
+  UpdateGoalMutation,
   User,
 } from "../API";
 import Row from "../components/Row";
-import { createGoal, createGoalList } from "../graphql/mutations";
+import { createGoal, createGoalList, updateGoal } from "../graphql/mutations";
 import { getGoalList, listGoalLists } from "../graphql/queries";
 import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
@@ -242,6 +244,23 @@ export default function GoalListScreen({ navigation }) {
     }
   }
 
+  async function handleCompleteGoal(goal: Goal | null, isChecked: boolean) {
+    if (!goal) return;
+    const updateGoalInput: UpdateGoalInput = {
+      id: goal.id,
+      completed: isChecked,
+    };
+    const updatedGoal = (await API.graphql(
+      graphqlOperation(updateGoal, { input: updateGoalInput })
+    )) as GraphQLResult<UpdateGoalMutation>;
+
+    if (updatedGoal.data?.updateGoal) {
+      dispatch(
+        GoalListReducer.setUpdatedGoal(updatedGoal.data.updateGoal as Goal)
+      );
+    }
+  }
+
   const renderGoalList = () => {
     if (!selectedGoalList) return null;
 
@@ -262,7 +281,7 @@ export default function GoalListScreen({ navigation }) {
           <View
             key={goal?.id}
             style={{
-              paddingLeft:4,
+              paddingLeft: 4,
               paddingRight: 10,
               flexDirection: "row",
               alignItems: "center",
@@ -271,11 +290,14 @@ export default function GoalListScreen({ navigation }) {
           >
             <Row>
               <BouncyCheckbox
+                isChecked={goal?.completed || false}
                 size={32}
                 fillColor="black"
                 unfillColor="#FFFFFF"
                 iconStyle={{ borderColor: "black", borderRadius: 5 }}
-                onPress={(isChecked: boolean) => {}}
+                onPress={(isChecked: boolean) =>
+                  handleCompleteGoal(goal, isChecked)
+                }
               />
               <Pressable
                 style={{ flex: 1 }}
@@ -285,7 +307,9 @@ export default function GoalListScreen({ navigation }) {
                   <Text
                     style={{
                       fontSize: 20,
-                      textDecorationLine: "line-through",
+                      textDecorationLine: `${
+                        goal?.completed ? "line-through" : "none"
+                      }`,
                       flexShrink: 100,
                     }}
                   >

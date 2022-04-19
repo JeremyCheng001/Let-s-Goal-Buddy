@@ -109,6 +109,7 @@ export const getGoalList = /* GraphQL */ `
           startDateTime
           endDateTime
           progress
+          completed
           createdAt
           updatedAt
           goalListGoalsId
@@ -163,6 +164,7 @@ export const getGoal = /* GraphQL */ `
       startDateTime
       endDateTime
       progress
+      completed
       goalList {
         id
         type
@@ -205,6 +207,7 @@ export const listGoals = /* GraphQL */ `
         startDateTime
         endDateTime
         progress
+        completed
         goalList {
           id
           type

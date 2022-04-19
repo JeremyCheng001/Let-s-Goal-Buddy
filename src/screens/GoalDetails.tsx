@@ -103,13 +103,13 @@ const GoalDetails: FunctionComponent<GoalDetailsProps> = ({ navigation }) => {
         <Label>Progress:</Label>
         <Row style={{ marginLeft: 20 }}>
           <Slider
-            max={101}
+            max={100}
             values={[progress]}
             onValuesChange={(values) => setProgress(values[0])}
             onValuesChangeFinish={handleSaveGoal}
           />
         </Row>
-        <Label style={{ marginLeft: 12, fontSize: 18 }}>{progress}</Label>
+        <Label style={{ marginLeft: 16, fontSize: 18 }}>{progress}</Label>
       </Row>
       <Row
         style={{

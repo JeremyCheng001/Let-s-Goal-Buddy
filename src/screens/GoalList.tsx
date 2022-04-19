@@ -33,6 +33,7 @@ import { getGoalList, listGoalLists } from "../graphql/queries";
 import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
 import * as Progress from "react-native-progress";
+import styled from "styled-components";
 
 const DateTypes = [
   "Daily Goals",
@@ -261,9 +262,11 @@ export default function GoalListScreen({ navigation }) {
           <View
             key={goal?.id}
             style={{
+              paddingLeft:4,
+              paddingRight: 10,
               flexDirection: "row",
               alignItems: "center",
-              marginBottom: 12,
+              marginBottom: 16,
             }}
           >
             <Row>
@@ -278,11 +281,25 @@ export default function GoalListScreen({ navigation }) {
                 style={{ flex: 1 }}
                 onPress={() => handleNavigateToGoalDetailsScreen(goal)}
               >
-                <Text
-                  style={{ fontSize: 20, textDecorationLine: "line-through" }}
-                >
-                  {goal?.title}
-                </Text>
+                <Row style={{ justifyContent: "space-between" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      textDecorationLine: "line-through",
+                      flexShrink: 100,
+                    }}
+                  >
+                    {goal?.title}
+                  </Text>
+                  <Row style={{ width: 90, right: 2, flexShrink: 1 }}>
+                    <Progress.Bar
+                      progress={(goal?.progress || 0) / 100}
+                      width={50}
+                      style={{ marginLeft: 8, marginRight: 4 }}
+                    />
+                    <Label>{`${goal?.progress || 0}%`}</Label>
+                  </Row>
+                </Row>
               </Pressable>
             </Row>
           </View>
@@ -361,3 +378,7 @@ export default function GoalListScreen({ navigation }) {
     </View>
   );
 }
+
+const Label = styled(Text)`
+  font-size: 12px;
+`;

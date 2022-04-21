@@ -62,9 +62,6 @@ const GoalListGoalBuddiesModal: FunctionComponent<
           }
         }
 
-        for (let i = 0; i < 2; i++) {
-          goalBuddies = goalBuddies.concat(goalBuddies);
-        }
         setGoalBuddies(goalBuddies);
       }
     }
@@ -263,7 +260,9 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
 
-      <Text category={"h6"}>Watched by</Text>
+      <Text category={"h6"} style={{ marginBottom: 8 }}>
+        Watched by
+      </Text>
       {renderGoalBuddiesList()}
       {renderDivider()}
       {renderSearchInput()}

@@ -22,7 +22,7 @@ import {
   animals,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { CreateUserInput, CreateUserMutation, GetUserQuery } from "./src/API";
+import { CreateUserInput, CreateUserMutation, GetUserQuery, User } from "./src/API";
 import awsconfig from "./src/aws-exports";
 import { View } from "./src/components/Themed";
 import { createUser } from "./src/graphql/mutations";
@@ -98,7 +98,7 @@ function App(props: any) {
         graphqlOperation(getUser, { id: cognitoUserSubID })
       )) as GraphQLResult<GetUserQuery>;
       if (resp.data?.getUser) {
-        store.dispatch(setUser(resp.data.getUser));
+        store.dispatch(setUser(resp.data.getUser as User));
       } else {
         // if there is no user record in our DynamoDB, we create a new user for the newly sign-in user
         const randomName = uniqueNamesGenerator({
@@ -123,7 +123,7 @@ function App(props: any) {
         )) as GraphQLResult<CreateUserMutation>;
 
         if (newUser.data?.createUser) {
-          store.dispatch(setUser(newUser.data.createUser));
+          store.dispatch(setUser(newUser.data.createUser as User));
         }
       }
     }

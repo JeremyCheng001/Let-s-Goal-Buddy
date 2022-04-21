@@ -15,6 +15,7 @@ import { RootStackParamList, RootTabParamList } from "../../types";
 import GoalBuddiesStackScreen from "./GoalBuddiesStack";
 import GoalListStackScreen from "./GoalListStack";
 import SettingsStackScreen from "./SettingsStack";
+import GoalListGoalBuddiesModal from "../screens/GoalListGoalBuddiesModal";
 
 export default function Navigation({
   colorScheme,
@@ -34,7 +35,7 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const RootStack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator();
 function RootNavigator() {
   return (
     <RootStack.Navigator>
@@ -50,6 +51,13 @@ function RootNavigator() {
       />
       <RootStack.Group screenOptions={{ presentation: "modal" }}>
         <RootStack.Screen name="Modal" component={ModalScreen} />
+        <RootStack.Screen
+          name="GoalListGoalBuddiesModal"
+          component={GoalListGoalBuddiesModal}
+          options={({ route }) => ({
+            headerTitle: "Watched by Your Goal Buddies", // to overwrite the header title, otherwise it would be the same as "name" by default
+          })}
+        />
       </RootStack.Group>
     </RootStack.Navigator>
   );

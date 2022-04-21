@@ -58,6 +58,16 @@ export const onCreateUser = /* GraphQL */ `
         }
         nextToken
       }
+      goalBuddyGoalLists {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -80,6 +90,16 @@ export const onUpdateUser = /* GraphQL */ `
           createdAt
           updatedAt
           userGoalListId
+        }
+        nextToken
+      }
+      goalBuddyGoalLists {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -108,6 +128,16 @@ export const onDeleteUser = /* GraphQL */ `
         }
         nextToken
       }
+      goalBuddyGoalLists {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -129,6 +159,9 @@ export const onCreateGoalList = /* GraphQL */ `
         goalList {
           nextToken
         }
+        goalBuddyGoalLists {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -145,6 +178,16 @@ export const onCreateGoalList = /* GraphQL */ `
           createdAt
           updatedAt
           goalListGoalsId
+        }
+        nextToken
+      }
+      goalBuddies {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -170,6 +213,9 @@ export const onUpdateGoalList = /* GraphQL */ `
         goalList {
           nextToken
         }
+        goalBuddyGoalLists {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -186,6 +232,16 @@ export const onUpdateGoalList = /* GraphQL */ `
           createdAt
           updatedAt
           goalListGoalsId
+        }
+        nextToken
+      }
+      goalBuddies {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -211,6 +267,9 @@ export const onDeleteGoalList = /* GraphQL */ `
         goalList {
           nextToken
         }
+        goalBuddyGoalLists {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -227,6 +286,16 @@ export const onDeleteGoalList = /* GraphQL */ `
           createdAt
           updatedAt
           goalListGoalsId
+        }
+        nextToken
+      }
+      goalBuddies {
+        items {
+          id
+          userID
+          goalListID
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -262,6 +331,9 @@ export const onCreateGoal = /* GraphQL */ `
           updatedAt
         }
         goals {
+          nextToken
+        }
+        goalBuddies {
           nextToken
         }
         createdAt
@@ -302,6 +374,9 @@ export const onUpdateGoal = /* GraphQL */ `
         goals {
           nextToken
         }
+        goalBuddies {
+          nextToken
+        }
         createdAt
         updatedAt
         userGoalListId
@@ -340,6 +415,9 @@ export const onDeleteGoal = /* GraphQL */ `
         goals {
           nextToken
         }
+        goalBuddies {
+          nextToken
+        }
         createdAt
         updatedAt
         userGoalListId
@@ -347,6 +425,156 @@ export const onDeleteGoal = /* GraphQL */ `
       createdAt
       updatedAt
       goalListGoalsId
+    }
+  }
+`;
+export const onCreateGoalBuddyGoalLists = /* GraphQL */ `
+  subscription OnCreateGoalBuddyGoalLists {
+    onCreateGoalBuddyGoalLists {
+      id
+      userID
+      goalListID
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        goalBuddies {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateGoalBuddyGoalLists = /* GraphQL */ `
+  subscription OnUpdateGoalBuddyGoalLists {
+    onUpdateGoalBuddyGoalLists {
+      id
+      userID
+      goalListID
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        goalBuddies {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteGoalBuddyGoalLists = /* GraphQL */ `
+  subscription OnDeleteGoalBuddyGoalLists {
+    onDeleteGoalBuddyGoalLists {
+      id
+      userID
+      goalListID
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      goalList {
+        id
+        type
+        startDate
+        endDate
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        goals {
+          nextToken
+        }
+        goalBuddies {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        userGoalListId
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

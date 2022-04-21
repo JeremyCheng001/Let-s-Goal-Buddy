@@ -105,6 +105,7 @@ export type User = {
   imageUrl?: string | null,
   motto?: string | null,
   goalList?: ModelGoalListConnection | null,
+  goalBuddyGoalLists?: ModelGoalBuddyGoalListsConnection | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -123,6 +124,7 @@ export type GoalList = {
   endDate: string,
   user?: User | null,
   goals?: ModelGoalConnection | null,
+  goalBuddies?: ModelGoalBuddyGoalListsConnection | null,
   createdAt: string,
   updatedAt: string,
   userGoalListId?: string | null,
@@ -148,6 +150,23 @@ export type Goal = {
   createdAt: string,
   updatedAt: string,
   goalListGoalsId?: string | null,
+};
+
+export type ModelGoalBuddyGoalListsConnection = {
+  __typename: "ModelGoalBuddyGoalListsConnection",
+  items:  Array<GoalBuddyGoalLists | null >,
+  nextToken?: string | null,
+};
+
+export type GoalBuddyGoalLists = {
+  __typename: "GoalBuddyGoalLists",
+  id: string,
+  userID: string,
+  goalListID: string,
+  user: User,
+  goalList: GoalList,
+  createdAt: string,
+  updatedAt: string,
 };
 
 export type UpdateUserInput = {
@@ -269,6 +288,30 @@ export type DeleteGoalInput = {
   id: string,
 };
 
+export type CreateGoalBuddyGoalListsInput = {
+  id?: string | null,
+  userID: string,
+  goalListID: string,
+};
+
+export type ModelGoalBuddyGoalListsConditionInput = {
+  userID?: ModelIDInput | null,
+  goalListID?: ModelIDInput | null,
+  and?: Array< ModelGoalBuddyGoalListsConditionInput | null > | null,
+  or?: Array< ModelGoalBuddyGoalListsConditionInput | null > | null,
+  not?: ModelGoalBuddyGoalListsConditionInput | null,
+};
+
+export type UpdateGoalBuddyGoalListsInput = {
+  id: string,
+  userID?: string | null,
+  goalListID?: string | null,
+};
+
+export type DeleteGoalBuddyGoalListsInput = {
+  id: string,
+};
+
 export type ModelTodoFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -326,6 +369,15 @@ export type ModelGoalFilterInput = {
   or?: Array< ModelGoalFilterInput | null > | null,
   not?: ModelGoalFilterInput | null,
   goalListGoalsId?: ModelIDInput | null,
+};
+
+export type ModelGoalBuddyGoalListsFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  goalListID?: ModelIDInput | null,
+  and?: Array< ModelGoalBuddyGoalListsFilterInput | null > | null,
+  or?: Array< ModelGoalBuddyGoalListsFilterInput | null > | null,
+  not?: ModelGoalBuddyGoalListsFilterInput | null,
 };
 
 export type CreateTodoMutationVariables = {
@@ -406,6 +458,18 @@ export type CreateUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -435,6 +499,18 @@ export type UpdateUserMutation = {
         createdAt: string,
         updatedAt: string,
         userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -470,6 +546,18 @@ export type DeleteUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -498,6 +586,10 @@ export type CreateGoalListMutation = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -516,6 +608,18 @@ export type CreateGoalListMutation = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -548,6 +652,10 @@ export type UpdateGoalListMutation = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -566,6 +674,18 @@ export type UpdateGoalListMutation = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -598,6 +718,10 @@ export type DeleteGoalListMutation = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -616,6 +740,18 @@ export type DeleteGoalListMutation = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -659,6 +795,10 @@ export type CreateGoalMutation = {
       } | null,
       goals?:  {
         __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -707,6 +847,10 @@ export type UpdateGoalMutation = {
         __typename: "ModelGoalConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       userGoalListId?: string | null,
@@ -753,6 +897,10 @@ export type DeleteGoalMutation = {
         __typename: "ModelGoalConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       userGoalListId?: string | null,
@@ -760,6 +908,192 @@ export type DeleteGoalMutation = {
     createdAt: string,
     updatedAt: string,
     goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type CreateGoalBuddyGoalListsMutationVariables = {
+  input: CreateGoalBuddyGoalListsInput,
+  condition?: ModelGoalBuddyGoalListsConditionInput | null,
+};
+
+export type CreateGoalBuddyGoalListsMutation = {
+  createGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateGoalBuddyGoalListsMutationVariables = {
+  input: UpdateGoalBuddyGoalListsInput,
+  condition?: ModelGoalBuddyGoalListsConditionInput | null,
+};
+
+export type UpdateGoalBuddyGoalListsMutation = {
+  updateGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteGoalBuddyGoalListsMutationVariables = {
+  input: DeleteGoalBuddyGoalListsInput,
+  condition?: ModelGoalBuddyGoalListsConditionInput | null,
+};
+
+export type DeleteGoalBuddyGoalListsMutation = {
+  deleteGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -827,6 +1161,18 @@ export type GetUserQuery = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -850,6 +1196,10 @@ export type ListUsersQuery = {
       motto?: string | null,
       goalList?:  {
         __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -881,6 +1231,10 @@ export type GetGoalListQuery = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -899,6 +1253,18 @@ export type GetGoalListQuery = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -935,6 +1301,10 @@ export type ListGoalListsQuery = {
       } | null,
       goals?:  {
         __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -980,6 +1350,10 @@ export type GetGoalQuery = {
         __typename: "ModelGoalConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       userGoalListId?: string | null,
@@ -1022,6 +1396,108 @@ export type ListGoalsQuery = {
       createdAt: string,
       updatedAt: string,
       goalListGoalsId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetGoalBuddyGoalListsQueryVariables = {
+  id: string,
+};
+
+export type GetGoalBuddyGoalListsQuery = {
+  getGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListGoalBuddyGoalListsQueryVariables = {
+  filter?: ModelGoalBuddyGoalListsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListGoalBuddyGoalListsQuery = {
+  listGoalBuddyGoalLists?:  {
+    __typename: "ModelGoalBuddyGoalListsConnection",
+    items:  Array< {
+      __typename: "GoalBuddyGoalLists",
+      id: string,
+      userID: string,
+      goalListID: string,
+      user:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      goalList:  {
+        __typename: "GoalList",
+        id: string,
+        type: number,
+        startDate: string,
+        endDate: string,
+        createdAt: string,
+        updatedAt: string,
+        userGoalListId?: string | null,
+      },
+      createdAt: string,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1085,6 +1561,18 @@ export type OnCreateUserSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1109,6 +1597,18 @@ export type OnUpdateUserSubscription = {
         createdAt: string,
         updatedAt: string,
         userGoalListId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1139,6 +1639,18 @@ export type OnDeleteUserSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    goalBuddyGoalLists?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1162,6 +1674,10 @@ export type OnCreateGoalListSubscription = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1180,6 +1696,18 @@ export type OnCreateGoalListSubscription = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1207,6 +1735,10 @@ export type OnUpdateGoalListSubscription = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1225,6 +1757,18 @@ export type OnUpdateGoalListSubscription = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1252,6 +1796,10 @@ export type OnDeleteGoalListSubscription = {
         __typename: "ModelGoalListConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1270,6 +1818,18 @@ export type OnDeleteGoalListSubscription = {
         createdAt: string,
         updatedAt: string,
         goalListGoalsId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    goalBuddies?:  {
+      __typename: "ModelGoalBuddyGoalListsConnection",
+      items:  Array< {
+        __typename: "GoalBuddyGoalLists",
+        id: string,
+        userID: string,
+        goalListID: string,
+        createdAt: string,
+        updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1308,6 +1868,10 @@ export type OnCreateGoalSubscription = {
       } | null,
       goals?:  {
         __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1351,6 +1915,10 @@ export type OnUpdateGoalSubscription = {
         __typename: "ModelGoalConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       userGoalListId?: string | null,
@@ -1392,6 +1960,10 @@ export type OnDeleteGoalSubscription = {
         __typename: "ModelGoalConnection",
         nextToken?: string | null,
       } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       userGoalListId?: string | null,
@@ -1399,5 +1971,176 @@ export type OnDeleteGoalSubscription = {
     createdAt: string,
     updatedAt: string,
     goalListGoalsId?: string | null,
+  } | null,
+};
+
+export type OnCreateGoalBuddyGoalListsSubscription = {
+  onCreateGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateGoalBuddyGoalListsSubscription = {
+  onUpdateGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteGoalBuddyGoalListsSubscription = {
+  onDeleteGoalBuddyGoalLists?:  {
+    __typename: "GoalBuddyGoalLists",
+    id: string,
+    userID: string,
+    goalListID: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    goalList:  {
+      __typename: "GoalList",
+      id: string,
+      type: number,
+      startDate: string,
+      endDate: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      goals?:  {
+        __typename: "ModelGoalConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddies?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      userGoalListId?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };

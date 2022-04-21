@@ -20,7 +20,7 @@ export default function GoalListStackScreen({ navigation }) {
         options={{
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate("Modal")}
+              onPress={() => navigation.navigate("GoalListGoalBuddiesModal")}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}
@@ -41,7 +41,7 @@ export default function GoalListStackScreen({ navigation }) {
         options={{
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate("Modal")}
+              onPress={() => navigation.navigate("GoalListGoalBuddiesModal")}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}

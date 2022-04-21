@@ -17,7 +17,9 @@ type User @model {
   imageUrl: String
   motto: String
 
-  goalList: [GoalList] @hasMany
+  goalList: [GoalList] @hasMany # a user could have many goal lists
+
+  goalBuddyGoalLists: [GoalList] @manyToMany(relationName: "GoalBuddyGoalLists") # a user could have many goal lists that their goal buddies add to them
 }
 
 type GoalList @model {
@@ -26,9 +28,11 @@ type GoalList @model {
   startDate: AWSDate!
   endDate: AWSDate!
 
-  user: User @belongsTo
+  user: User @belongsTo # a goal list can only belongs to one user
 
   goals: [Goal] @hasMany
+
+  goalBuddies: [User] @manyToMany(relationName: "GoalBuddyGoalLists") # a goal list could have many goal buddies
 }
 
 type Goal @model {

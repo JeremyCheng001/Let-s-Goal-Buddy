@@ -94,6 +94,83 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const getFriendShip = /* GraphQL */ `
+  query GetFriendShip($id: ID!) {
+    getFriendShip(id: $id) {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
+export const listFriendShips = /* GraphQL */ `
+  query ListFriendShips(
+    $filter: ModelFriendShipFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listFriendShips(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        user {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        friend {
+          id
+          appID
+          name
+          imageUrl
+          motto
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        friendShipUserId
+        friendShipFriendId
+      }
+      nextToken
+    }
+  }
+`;
 export const getGoalList = /* GraphQL */ `
   query GetGoalList($id: ID!) {
     getGoalList(id: $id) {

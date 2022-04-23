@@ -143,6 +143,129 @@ export const onDeleteUser = /* GraphQL */ `
     }
   }
 `;
+export const onCreateFriendShip = /* GraphQL */ `
+  subscription OnCreateFriendShip {
+    onCreateFriendShip {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
+export const onUpdateFriendShip = /* GraphQL */ `
+  subscription OnUpdateFriendShip {
+    onUpdateFriendShip {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
+export const onDeleteFriendShip = /* GraphQL */ `
+  subscription OnDeleteFriendShip {
+    onDeleteFriendShip {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
 export const onCreateGoalList = /* GraphQL */ `
   subscription OnCreateGoalList {
     onCreateGoalList {

@@ -22,6 +22,12 @@ type User @model {
   goalBuddyGoalLists: [GoalList] @manyToMany(relationName: "GoalBuddyGoalLists") # a user could have many goal lists that their goal buddies add to them
 }
 
+type FriendShip @model{
+  id: ID!
+  user: User! @hasOne
+  friend: User! @hasOne # a user could a list of friends (NOTE, friends are not necessarily goal buddies, goal buddies are those friends are added to at least one of the goal lists)
+}
+
 type GoalList @model {
   id: ID!
   type: Int!

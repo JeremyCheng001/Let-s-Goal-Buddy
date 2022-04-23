@@ -181,6 +181,57 @@ export type DeleteUserInput = {
   id: string,
 };
 
+export type CreateFriendShipInput = {
+  id?: string | null,
+  friendShipUserId: string,
+  friendShipFriendId: string,
+};
+
+export type ModelFriendShipConditionInput = {
+  and?: Array< ModelFriendShipConditionInput | null > | null,
+  or?: Array< ModelFriendShipConditionInput | null > | null,
+  not?: ModelFriendShipConditionInput | null,
+  friendShipUserId?: ModelIDInput | null,
+  friendShipFriendId?: ModelIDInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type FriendShip = {
+  __typename: "FriendShip",
+  id: string,
+  user: User,
+  friend: User,
+  createdAt: string,
+  updatedAt: string,
+  friendShipUserId: string,
+  friendShipFriendId: string,
+};
+
+export type UpdateFriendShipInput = {
+  id: string,
+  friendShipUserId?: string | null,
+  friendShipFriendId?: string | null,
+};
+
+export type DeleteFriendShipInput = {
+  id: string,
+};
+
 export type CreateGoalListInput = {
   id?: string | null,
   type: number,
@@ -209,22 +260,6 @@ export type ModelIntInput = {
   between?: Array< number | null > | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
 };
 
 export type UpdateGoalListInput = {
@@ -342,6 +377,21 @@ export type ModelUserFilterInput = {
 export type ModelUserConnection = {
   __typename: "ModelUserConnection",
   items:  Array<User | null >,
+  nextToken?: string | null,
+};
+
+export type ModelFriendShipFilterInput = {
+  id?: ModelIDInput | null,
+  and?: Array< ModelFriendShipFilterInput | null > | null,
+  or?: Array< ModelFriendShipFilterInput | null > | null,
+  not?: ModelFriendShipFilterInput | null,
+  friendShipUserId?: ModelIDInput | null,
+  friendShipFriendId?: ModelIDInput | null,
+};
+
+export type ModelFriendShipConnection = {
+  __typename: "ModelFriendShipConnection",
+  items:  Array<FriendShip | null >,
   nextToken?: string | null,
 };
 
@@ -560,6 +610,162 @@ export type DeleteUserMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type CreateFriendShipMutationVariables = {
+  input: CreateFriendShipInput,
+  condition?: ModelFriendShipConditionInput | null,
+};
+
+export type CreateFriendShipMutation = {
+  createFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
+  } | null,
+};
+
+export type UpdateFriendShipMutationVariables = {
+  input: UpdateFriendShipInput,
+  condition?: ModelFriendShipConditionInput | null,
+};
+
+export type UpdateFriendShipMutation = {
+  updateFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
+  } | null,
+};
+
+export type DeleteFriendShipMutationVariables = {
+  input: DeleteFriendShipInput,
+  condition?: ModelFriendShipConditionInput | null,
+};
+
+export type DeleteFriendShipMutation = {
+  deleteFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
   } | null,
 };
 
@@ -1209,6 +1415,98 @@ export type ListUsersQuery = {
   } | null,
 };
 
+export type GetFriendShipQueryVariables = {
+  id: string,
+};
+
+export type GetFriendShipQuery = {
+  getFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
+  } | null,
+};
+
+export type ListFriendShipsQueryVariables = {
+  filter?: ModelFriendShipFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListFriendShipsQuery = {
+  listFriendShips?:  {
+    __typename: "ModelFriendShipConnection",
+    items:  Array< {
+      __typename: "FriendShip",
+      id: string,
+      user:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      friend:  {
+        __typename: "User",
+        id: string,
+        appID: string,
+        name: string,
+        imageUrl?: string | null,
+        motto?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      createdAt: string,
+      updatedAt: string,
+      friendShipUserId: string,
+      friendShipFriendId: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetGoalListQueryVariables = {
   id: string,
 };
@@ -1653,6 +1951,147 @@ export type OnDeleteUserSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type OnCreateFriendShipSubscription = {
+  onCreateFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
+  } | null,
+};
+
+export type OnUpdateFriendShipSubscription = {
+  onUpdateFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
+  } | null,
+};
+
+export type OnDeleteFriendShipSubscription = {
+  onDeleteFriendShip?:  {
+    __typename: "FriendShip",
+    id: string,
+    user:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    friend:  {
+      __typename: "User",
+      id: string,
+      appID: string,
+      name: string,
+      imageUrl?: string | null,
+      motto?: string | null,
+      goalList?:  {
+        __typename: "ModelGoalListConnection",
+        nextToken?: string | null,
+      } | null,
+      goalBuddyGoalLists?:  {
+        __typename: "ModelGoalBuddyGoalListsConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+    friendShipUserId: string,
+    friendShipFriendId: string,
   } | null,
 };
 

@@ -161,6 +161,138 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
+export const createFriendShip = /* GraphQL */ `
+  mutation CreateFriendShip(
+    $input: CreateFriendShipInput!
+    $condition: ModelFriendShipConditionInput
+  ) {
+    createFriendShip(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
+export const updateFriendShip = /* GraphQL */ `
+  mutation UpdateFriendShip(
+    $input: UpdateFriendShipInput!
+    $condition: ModelFriendShipConditionInput
+  ) {
+    updateFriendShip(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
+export const deleteFriendShip = /* GraphQL */ `
+  mutation DeleteFriendShip(
+    $input: DeleteFriendShipInput!
+    $condition: ModelFriendShipConditionInput
+  ) {
+    deleteFriendShip(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      friend {
+        id
+        appID
+        name
+        imageUrl
+        motto
+        goalList {
+          nextToken
+        }
+        goalBuddyGoalLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      friendShipUserId
+      friendShipFriendId
+    }
+  }
+`;
 export const createGoalList = /* GraphQL */ `
   mutation CreateGoalList(
     $input: CreateGoalListInput!

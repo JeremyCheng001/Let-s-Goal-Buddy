@@ -7,7 +7,7 @@ import {
   Input,
   List,
   ListItem,
-  Text,
+  Text
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { StatusBar } from "expo-status-bar";
@@ -16,17 +16,23 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { useSelector } from "react-redux";
 import {
-  CreateGoalBuddyGoalListsInput,
-  CreateGoalBuddyGoalListsMutation,
+  CreateGoalBuddyGoalListsInput, DeleteGoalBuddyGoalListsInput, GoalBuddyGoalLists,
   GoalList,
   ListGoalBuddyGoalListsQuery,
   ListUsersQuery,
-  User,
+  User
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
-import { createGoalBuddyGoalLists } from "../graphql/mutations";
+import {
+  createGoalBuddyGoalLists,
+  deleteGoalBuddyGoalLists
+} from "../graphql/mutations";
 import { listGoalBuddyGoalLists, listUsers } from "../graphql/queries";
+import {
+  onCreateGoalBuddyGoalLists,
+  onDeleteGoalBuddyGoalLists
+} from "../graphql/subscriptions";
 import { RootState } from "../store/store";
 
 interface GoalListGoalBuddiesModalProps {}
@@ -41,7 +47,68 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     (state: RootState) => state.goalListReducer.selectedGoalList
   );
 
-  const [goalBuddies, setGoalBuddies] = useState<User[]>([]);
+  const [goalBuddyGoalLists, setGoalBuddyGoalLists] = useState<
+    GoalBuddyGoalLists[]
+  >([]);
+
+  useEffect(() => {
+    const subscription_addGoalBody = API.graphql(
+      graphqlOperation(onCreateGoalBuddyGoalLists)
+      // @ts-ignore
+    ).subscribe({
+      next: ({ provider, value }: any) => {
+        if (selectedGoalList) {
+          if (
+            value.data.onCreateGoalBuddyGoalLists.goalListID ===
+            selectedGoalList.id
+          ) {
+            setGoalBuddyGoalLists((prevState: GoalBuddyGoalLists[]) => {
+              let updatedGoalBuddyGoalLists = [...prevState];
+              updatedGoalBuddyGoalLists.push(
+                value.data.onCreateGoalBuddyGoalLists
+              );
+
+              return updatedGoalBuddyGoalLists;
+            });
+          }
+        }
+      },
+    });
+
+    const subscription_deleteGoalBody = API.graphql(
+      graphqlOperation(onDeleteGoalBuddyGoalLists)
+      // @ts-ignore
+    ).subscribe({
+      next: ({ provider, value }: any) => {
+        if (selectedGoalList) {
+          const deletedGoalBuddyGoalList =
+            value.data.onDeleteGoalBuddyGoalLists;
+
+          if (deletedGoalBuddyGoalList.goalListID === selectedGoalList.id) {
+            setGoalBuddyGoalLists((prevState: GoalBuddyGoalLists[]) => {
+              let updatedGoalBuddyGoalLists = [...prevState];
+              const deleteIndex = updatedGoalBuddyGoalLists.findIndex(
+                (goalBuddyGoalList) =>
+                  goalBuddyGoalList.id === deletedGoalBuddyGoalList.id
+              );
+              if (deleteIndex > -1) {
+                updatedGoalBuddyGoalLists = updatedGoalBuddyGoalLists
+                  .slice(0, deleteIndex)
+                  .concat(updatedGoalBuddyGoalLists.slice(deleteIndex + 1));
+              }
+
+              return updatedGoalBuddyGoalLists;
+            });
+          }
+        }
+      },
+    });
+
+    return () => {
+      subscription_addGoalBody.unsubscribe();
+      subscription_deleteGoalBody.unsubscribe();
+    };
+  }, []);
 
   async function fetchGoalBuddies() {
     if (selectedGoalList) {
@@ -54,15 +121,10 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       )) as GraphQLResult<ListGoalBuddyGoalListsQuery>;
 
       if (goalBuddyGoalLists.data?.listGoalBuddyGoalLists) {
-        let goalBuddies: User[] = [];
-        for (let goalBuddyGoalList of goalBuddyGoalLists.data
-          .listGoalBuddyGoalLists.items) {
-          if (goalBuddyGoalList) {
-            goalBuddies.push(goalBuddyGoalList.user);
-          }
-        }
-
-        setGoalBuddies(goalBuddies);
+        setGoalBuddyGoalLists(
+          goalBuddyGoalLists.data.listGoalBuddyGoalLists
+            .items as GoalBuddyGoalLists[]
+        );
       }
     }
   }
@@ -70,6 +132,19 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   useEffect(() => {
     fetchGoalBuddies();
   }, [selectedGoalList?.id]);
+
+  async function handleDeleteBuddyFromGoalList(goalBuddyGoalListID: string) {
+    if (selectedGoalList) {
+      const deleteGoalBuddyGoalListsInput: DeleteGoalBuddyGoalListsInput = {
+        id: goalBuddyGoalListID,
+      };
+      await API.graphql(
+        graphqlOperation(deleteGoalBuddyGoalLists, {
+          input: deleteGoalBuddyGoalListsInput,
+        })
+      );
+    }
+  }
 
   const renderUserAvatar = (props: any) => (
     <Avatar
@@ -87,6 +162,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       title: string;
       description: string;
       userID: string;
+      goalBuddyGoalListID: string;
     };
     index: number;
   }) => {
@@ -99,7 +175,9 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         accessoryRight={
           <Button
             accessoryLeft={<Icon name="trash-2-outline" />}
-            // onPress={() => handleAddBuddyToGoalList(item.userID)}
+            onPress={() =>
+              handleDeleteBuddyFromGoalList(item.goalBuddyGoalListID)
+            }
           />
         }
       />
@@ -109,12 +187,14 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   // render a list of goal buddies you have already added to the goal list
   const renderGoalBuddiesList = () => {
     let data = [];
-    for (let goalBuddy of goalBuddies) {
-      if (goalBuddy) {
+
+    for (let goalBuddyGoalList of goalBuddyGoalLists) {
+      if (goalBuddyGoalList) {
         data.push({
-          title: goalBuddy.name,
-          description: `${goalBuddy.appID} (${goalBuddy.motto})`,
-          userID: goalBuddy.id,
+          title: goalBuddyGoalList.user.name,
+          description: `${goalBuddyGoalList.user.appID} (${goalBuddyGoalList.user.motto})`,
+          userID: goalBuddyGoalList.user.id,
+          goalBuddyGoalListID: goalBuddyGoalList.id,
         });
       }
     }
@@ -164,7 +244,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
           onChangeText={handleChangeSearchUserID}
         />
         <Button
-          style={{ marginLeft: 8, height: 24 }}
+          style={{ marginLeft: 8 }}
           accessoryRight={<Icon name="search-outline" />}
           onPress={handleSearchUser}
         >
@@ -179,15 +259,11 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         userID: userID,
         goalListID: selectedGoalList.id,
       };
-      const createGoalBuddyGoalList = (await API.graphql(
+      await API.graphql(
         graphqlOperation(createGoalBuddyGoalLists, {
           input: createGoalBuddyGoalListsInput,
         })
-      )) as GraphQLResult<CreateGoalBuddyGoalListsMutation>;
-
-      if (createGoalBuddyGoalList.data?.createGoalBuddyGoalLists) {
-        // TODO: use subscribe to update the new goal buddy
-      }
+      );
     }
   }
 
@@ -202,6 +278,11 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     };
     index: number;
   }) => {
+    const hasAlreadyAddedAsGoalBuddy =
+      goalBuddyGoalLists.findIndex(
+        (goalBuddyGoalList) => goalBuddyGoalList.user.id === item.userID
+      ) > -1; // is this user already added as a goal buddy to the current goal list?
+
     return (
       <ListItem
         key={index}
@@ -211,6 +292,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         accessoryRight={
           <Button
             accessoryLeft={<Icon name="person-add-outline" />}
+            disabled={hasAlreadyAddedAsGoalBuddy}
             onPress={() => handleAddBuddyToGoalList(item.userID)}
           />
         }

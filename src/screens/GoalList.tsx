@@ -198,6 +198,12 @@ export default function GoalListScreen({ navigation }) {
     )) as GraphQLResult<CreateGoalListMutation>;
 
     if (newGoalList.data?.createGoalList) {
+      dispatch(
+        GoalListReducer.setSelectedGoalList(
+          newGoalList.data.createGoalList as GoalList
+        )
+      );
+
       return newGoalList.data.createGoalList;
     } else {
       return null;

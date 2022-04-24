@@ -7,7 +7,7 @@ import {
   Input,
   List,
   ListItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { StatusBar } from "expo-status-bar";
@@ -16,22 +16,25 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { useSelector } from "react-redux";
 import {
-  CreateGoalBuddyGoalListsInput, DeleteGoalBuddyGoalListsInput, GoalBuddyGoalLists,
+  CreateGoalBuddyGoalListsInput,
+  DeleteGoalBuddyGoalListsInput,
+  FriendShip,
+  GoalBuddyGoalLists,
   GoalList,
   ListGoalBuddyGoalListsQuery,
   ListUsersQuery,
-  User
+  User,
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
 import {
   createGoalBuddyGoalLists,
-  deleteGoalBuddyGoalLists
+  deleteGoalBuddyGoalLists,
 } from "../graphql/mutations";
 import { listGoalBuddyGoalLists, listUsers } from "../graphql/queries";
 import {
   onCreateGoalBuddyGoalLists,
-  onDeleteGoalBuddyGoalLists
+  onDeleteGoalBuddyGoalLists,
 } from "../graphql/subscriptions";
 import { RootState } from "../store/store";
 
@@ -45,6 +48,10 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   const [searchedUsers, setSearchedUsers] = useState<(User | null)[]>([]);
   const selectedGoalList: GoalList | null = useSelector(
     (state: RootState) => state.goalListReducer.selectedGoalList
+  );
+
+  const friendships: FriendShip[] | null = useSelector(
+    (state: RootState) => state.goalBuddiesReducer.friendships
   );
 
   const [goalBuddyGoalLists, setGoalBuddyGoalLists] = useState<
@@ -314,7 +321,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     }
 
     return (
-      <Column>
+      <Column style={{ maxHeight: 100 }}>
         <List
           data={data}
           ItemSeparatorComponent={Divider}
@@ -337,6 +344,71 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     );
   };
 
+  const renderFriendItem = ({
+    item,
+    index,
+  }: {
+    item: {
+      title: string;
+      description: string;
+      userID: string;
+      friendship: FriendShip;
+    };
+    index: number;
+  }) => {
+    const hasAlreadyAddedAsGoalBuddy =
+      goalBuddyGoalLists.findIndex(
+        (goalBuddyGoalList) => goalBuddyGoalList.user.id === item.friendship.friendShipFriendId
+      ) > -1; // is this friend already added as a goal buddy to the current goal list?
+
+    return (
+      <ListItem
+        key={index}
+        title={item.title}
+        description={item.description}
+        accessoryLeft={renderUserAvatar}
+        accessoryRight={() => (
+          <Button
+            size={"tiny"}
+            disabled={hasAlreadyAddedAsGoalBuddy}
+            onPress={() =>
+              handleAddBuddyToGoalList(item.friendship.friendShipFriendId)
+            }
+          >
+            Add
+          </Button>
+        )}
+      />
+    );
+  };
+
+  const renderFriendsList = () => {
+    if (!friendships) return null;
+
+    let data = [];
+    for (let friendship of friendships) {
+      data.push({
+        title: friendship.friend.name,
+        description: `${friendship.friend.appID} (${friendship.friend.motto})`,
+        userID: friendship.friend.id,
+        friendship: friendship,
+      });
+    }
+
+    return (
+      <Column style={{ marginTop: 10 }}>
+        <Text category={"h6"} style={{ marginBottom: 8 }}>
+          Goal Buddies You Can Add:
+        </Text>
+        <List
+          data={data}
+          ItemSeparatorComponent={Divider}
+          renderItem={renderFriendItem}
+        />
+      </Column>
+    );
+  };
+
   return (
     <Column style={{ padding: 10 }}>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -347,6 +419,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       </Text>
       {renderGoalBuddiesList()}
       {renderDivider()}
+      {renderFriendsList()}
       {renderSearchInput()}
       {renderSearchedUsers()}
     </Column>

@@ -7,35 +7,42 @@ import {
   Input,
   Select,
   SelectItem,
-  Text,
+  Text
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
-import { reverse, sortBy, trim } from "lodash";
+import { trim } from "lodash";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Pressable, ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import * as Progress from "react-native-progress";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import {
   CreateGoalInput,
   CreateGoalListInput,
   CreateGoalListMutation,
   CreateGoalMutation,
+  FriendShip,
   GetGoalListQuery,
   Goal,
   GoalList,
+  ListFriendShipsQuery,
   ListGoalListsQuery,
   UpdateGoalInput,
   UpdateGoalMutation,
-  User,
+  User
 } from "../API";
 import Row from "../components/Row";
 import { createGoal, createGoalList, updateGoal } from "../graphql/mutations";
-import { getGoalList, listGoalLists } from "../graphql/queries";
+import {
+  getGoalList,
+  listFriendShips,
+  listGoalLists
+} from "../graphql/queries";
+import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
 import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
-import * as Progress from "react-native-progress";
-import styled from "styled-components";
 
 const DateTypes = [
   "Daily Goals",
@@ -61,16 +68,33 @@ export default function GoalListScreen({ navigation }) {
   const [endDateStr, setEndDateStr] = useState("");
   const [selectingDate, setSelectingDate] = useState(false);
 
-  const [checked, setChecked] = useState(false);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
   const [addingNewGoal, setAddingNewGoal] = useState(false);
   const [newGoalTitle, setNewGoalTitle] = useState("");
   const inputEl = useRef(null);
 
-  function handleShowCalendar() {
-    setSelectingDate((prevState) => !prevState);
+  async function getFriendsList() {
+    let friendships_: FriendShip[] = [];
+    const listFriendshipsQuery = (await API.graphql(
+      graphqlOperation(listFriendShips, {
+        filter: {
+          friendShipUserId: { eq: user.id },
+        },
+      })
+    )) as GraphQLResult<ListFriendShipsQuery>;
+
+    if (listFriendshipsQuery.data?.listFriendShips) {
+      for (let friendship of listFriendshipsQuery.data.listFriendShips.items) {
+        if (friendship) {
+          friendships_.push(friendship);
+        }
+      }
+    }
+
+    dispatch(GoalBuddiesReducer.setFriendships(friendships_));
   }
+  useEffect(() => {
+    getFriendsList();
+  }, []);
 
   // update date picker
   useEffect(() => {
@@ -111,6 +135,10 @@ export default function GoalListScreen({ navigation }) {
   useEffect(() => {
     fetchGoalList();
   }, [startDateStr, selectedDateTypeIndex.row, user.id]);
+
+  function handleShowCalendar() {
+    setSelectingDate((prevState) => !prevState);
+  }
 
   const renderDates = () => {
     return (

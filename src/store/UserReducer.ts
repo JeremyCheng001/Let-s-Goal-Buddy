@@ -13,7 +13,7 @@ const initialState: UserState = {
 };
 
 export const counterSlice = createSlice({
-  name: "counter",
+  name: "user",
   initialState,
   reducers: {
     resetUser: (state) => {

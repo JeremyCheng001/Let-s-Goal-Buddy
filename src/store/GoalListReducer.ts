@@ -12,7 +12,7 @@ const initialState: GoalListReducer = {
 };
 
 export const goalListSlice = createSlice({
-  name: "counter",
+  name: "goalList",
   initialState,
   reducers: {
     resetGoalListReducer: (state) => {

@@ -1,69 +1,51 @@
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import {
-    Avatar,
-    Button,
-    Divider,
-    Icon,
-    Input,
-    List,
-    ListItem,
-    Text
+  Avatar,
+  Button,
+  Divider,
+  Icon,
+  Input,
+  List,
+  ListItem,
+  Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
 import * as React from "react";
 import { FunctionComponent, useEffect, useState } from "react";
 import { View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
-    CreateFriendShipInput,
-    DeleteFriendShipMutation,
-    FriendShip,
-    ListFriendShipsQuery,
-    ListUsersQuery, User
+  CreateFriendShipInput,
+  DeleteFriendShipMutation,
+  FriendShip,
+  ListUsersQuery,
+  User,
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
 import { createFriendShip, deleteFriendShip } from "../graphql/mutations";
-import { listFriendShips, listUsers } from "../graphql/queries";
+import { listUsers } from "../graphql/queries";
 import {
-    onCreateFriendShip,
-    onDeleteFriendShip
+  onCreateFriendShip,
+  onDeleteFriendShip,
 } from "../graphql/subscriptions";
+import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
 import { RootState } from "../store/store";
 
 interface GoalBuddiesListProps {}
 
 const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
+  const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.userReducer);
   const [searchUserID, setSearchUserID] = useState<string>("");
   const [searchedUsers, setSearchedUsers] = useState<(User | null)[]>([]);
-  const [friendships, setFriendShips] = useState<FriendShip[]>([]);
 
-  async function getFriendsList() {
-    let friendships_: FriendShip[] = [];
-    const listFriendshipsQuery = (await API.graphql(
-      graphqlOperation(listFriendShips, {
-        filter: {
-          friendShipUserId: { eq: user.id },
-        },
-      })
-    )) as GraphQLResult<ListFriendShipsQuery>;
+  const friendships: FriendShip[] | null = useSelector(
+    (state: RootState) => state.goalBuddiesReducer.friendships
+  );
 
-    if (listFriendshipsQuery.data?.listFriendShips) {
-      for (let friendship of listFriendshipsQuery.data.listFriendShips.items) {
-        if (friendship) {
-          friendships_.push(friendship);
-        }
-      }
-    }
-
-    setFriendShips(friendships_);
-  }
   useEffect(() => {
-    // get friends list
-    getFriendsList();
-
     const subscription_createFriendship = API.graphql(
       graphqlOperation(onCreateFriendShip)
       // @ts-ignore
@@ -74,13 +56,8 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
           createdFriendship &&
           createdFriendship.friendShipUserId === user.id
         ) {
-          if (value.data.onCreateFriendShip) {
-            setFriendShips((prevState: FriendShip[]) => {
-              let updated = [...prevState];
-              updated.push(createdFriendship);
-
-              return updated;
-            });
+          if (createdFriendship) {
+            dispatch(GoalBuddiesReducer.addFriendship(createdFriendship));
           }
         }
       },
@@ -97,19 +74,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
           deletedFriendship.friendShipUserId === user.id
         ) {
           if (value.data.onDeleteFriendShip) {
-            setFriendShips((prevState: FriendShip[]) => {
-              let updated = [...prevState];
-              const deleteIndex = updated.findIndex(
-                (friendship) => friendship.id === deletedFriendship.id
-              );
-              if (deleteIndex > -1) {
-                updated = updated
-                  .slice(0, deleteIndex)
-                  .concat(updated.slice(deleteIndex + 1));
-              }
-
-              return updated;
-            });
+            dispatch(GoalBuddiesReducer.deleteFriendship(deletedFriendship));
           }
         }
       },
@@ -164,6 +129,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
   };
 
   const renderFriendsList = () => {
+    if (!friendships) return null;
     let data = [];
 
     for (let friendship of friendships) {
@@ -248,6 +214,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
     };
     index: number;
   }) => {
+    if (!friendships) return null;
     const userHasBeenAdded =
       friendships.findIndex(
         (friendship) => friendship.friendShipFriendId === item.userID

@@ -7,12 +7,12 @@ import {
   Input,
   List,
   ListItem,
-  Text,
+  Text
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
 import * as React from "react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,23 +20,17 @@ import {
   DeleteFriendShipMutation,
   FriendShip,
   ListUsersQuery,
-  User,
+  User
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
 import { createFriendShip, deleteFriendShip } from "../graphql/mutations";
 import { listUsers } from "../graphql/queries";
-import {
-  onCreateFriendShip,
-  onDeleteFriendShip,
-} from "../graphql/subscriptions";
-import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
 import { RootState } from "../store/store";
 
 interface GoalBuddiesListProps {}
 
 const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
-  const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.userReducer);
   const [searchUserID, setSearchUserID] = useState<string>("");
   const [searchedUsers, setSearchedUsers] = useState<(User | null)[]>([]);
@@ -44,47 +38,6 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
   const friendships: FriendShip[] | null = useSelector(
     (state: RootState) => state.goalBuddiesReducer.friendships
   );
-
-  useEffect(() => {
-    const subscription_createFriendship = API.graphql(
-      graphqlOperation(onCreateFriendShip)
-      // @ts-ignore
-    ).subscribe({
-      next: ({ provider, value }: any) => {
-        const createdFriendship: FriendShip = value.data.onCreateFriendShip;
-        if (
-          createdFriendship &&
-          createdFriendship.friendShipUserId === user.id
-        ) {
-          if (createdFriendship) {
-            dispatch(GoalBuddiesReducer.addFriendship(createdFriendship));
-          }
-        }
-      },
-    });
-
-    const subscription_deleteFriendship = API.graphql(
-      graphqlOperation(onDeleteFriendShip)
-      // @ts-ignore
-    ).subscribe({
-      next: ({ provider, value }: any) => {
-        const deletedFriendship: FriendShip = value.data.onDeleteFriendShip;
-        if (
-          deletedFriendship &&
-          deletedFriendship.friendShipUserId === user.id
-        ) {
-          if (value.data.onDeleteFriendShip) {
-            dispatch(GoalBuddiesReducer.deleteFriendship(deletedFriendship));
-          }
-        }
-      },
-    });
-
-    return () => {
-      subscription_createFriendship.unsubscribe();
-      subscription_deleteFriendship.unsubscribe();
-    };
-  }, []);
 
   const renderUserAvatar = (props: any) => (
     <Avatar

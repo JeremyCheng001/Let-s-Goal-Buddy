@@ -7,6 +7,7 @@ import { RootState, store } from "../store/store";
 import { User } from "../API";
 import {resetGoalListReducer } from "../store/GoalListReducer"
 import { resetUser } from "../store/UserReducer";
+import { resetGoalBuddiesReducer } from "../store/GoalBuddiesReducer";
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ function Settings() {
         onPress={() => {
           dispatch(resetUser())
           dispatch(resetGoalListReducer())
+          dispatch(resetGoalBuddiesReducer())
           Auth.signOut();
         }}
       >

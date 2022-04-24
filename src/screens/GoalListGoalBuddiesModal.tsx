@@ -16,6 +16,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { useSelector } from "react-redux";
 import {
+  CreateFriendShipInput,
   CreateGoalBuddyGoalListsInput,
   DeleteGoalBuddyGoalListsInput,
   FriendShip,
@@ -28,6 +29,7 @@ import {
 import Column from "../components/Column";
 import Row from "../components/Row";
 import {
+  createFriendShip,
   createGoalBuddyGoalLists,
   deleteGoalBuddyGoalLists,
 } from "../graphql/mutations";
@@ -54,9 +56,36 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     (state: RootState) => state.goalBuddiesReducer.friendships
   );
 
+  const user: User = useSelector((state: RootState) => state.userReducer);
+
   const [goalBuddyGoalLists, setGoalBuddyGoalLists] = useState<
     GoalBuddyGoalLists[]
   >([]);
+
+  async function handleAddFriend(friendUserID: string) {
+    let createFriendShipInput: CreateFriendShipInput = {
+      friendShipUserId: user.id,
+      friendShipFriendId: friendUserID,
+    };
+    await API.graphql(
+      graphqlOperation(createFriendShip, {
+        input: createFriendShipInput,
+      })
+    );
+
+    // friendship is mutual
+    // userB is friend of userA
+    // userA should be friend of userB as well
+    createFriendShipInput = {
+      friendShipUserId: friendUserID,
+      friendShipFriendId: user.id,
+    };
+    await API.graphql(
+      graphqlOperation(createFriendShip, {
+        input: createFriendShipInput,
+      })
+    );
+  }
 
   useEffect(() => {
     const subscription_addGoalBody = API.graphql(
@@ -64,19 +93,29 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       // @ts-ignore
     ).subscribe({
       next: ({ provider, value }: any) => {
+        const createdGoalBuddyGoalList = value.data.onCreateGoalBuddyGoalLists;
+        
         if (selectedGoalList) {
-          if (
-            value.data.onCreateGoalBuddyGoalLists.goalListID ===
-            selectedGoalList.id
-          ) {
+          if (createdGoalBuddyGoalList.goalListID === selectedGoalList.id) {
             setGoalBuddyGoalLists((prevState: GoalBuddyGoalLists[]) => {
               let updatedGoalBuddyGoalLists = [...prevState];
-              updatedGoalBuddyGoalLists.push(
-                value.data.onCreateGoalBuddyGoalLists
-              );
-
+              updatedGoalBuddyGoalLists.push(createdGoalBuddyGoalList);
+              
               return updatedGoalBuddyGoalLists;
             });
+            
+            if (friendships) {
+              // add this new goal buddy to the friends list, that way user can easily add this friend to other goal lists (without doing search over and over)
+              let goalBuddyAlreadyInFriendsList =
+              friendships.findIndex(
+                (friendship) =>
+                friendship.friendShipFriendId ===
+                createdGoalBuddyGoalList.user.id
+                ) > -1;
+                if (!goalBuddyAlreadyInFriendsList) {
+                handleAddFriend(createdGoalBuddyGoalList.user.id);
+              }
+            }
           }
         }
       },
@@ -358,7 +397,8 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   }) => {
     const hasAlreadyAddedAsGoalBuddy =
       goalBuddyGoalLists.findIndex(
-        (goalBuddyGoalList) => goalBuddyGoalList.user.id === item.friendship.friendShipFriendId
+        (goalBuddyGoalList) =>
+          goalBuddyGoalList.user.id === item.friendship.friendShipFriendId
       ) > -1; // is this friend already added as a goal buddy to the current goal list?
 
     return (

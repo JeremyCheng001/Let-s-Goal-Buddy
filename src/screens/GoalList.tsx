@@ -40,6 +40,7 @@ import {
   listFriendShips,
   listGoalLists
 } from "../graphql/queries";
+import { useFriendshipSubscription } from "../hooks/SubscriptionHooks";
 import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
 import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
@@ -54,6 +55,7 @@ const DateTypes = [
 // @ts-ignore
 export default function GoalListScreen({ navigation }) {
   const dispatch = useDispatch();
+  useFriendshipSubscription(); // subscribe on a higher level
   const user: User = useSelector((state: RootState) => state.userReducer);
   const selectedGoalList: GoalList | null = useSelector(
     (state: RootState) => state.goalListReducer.selectedGoalList
@@ -94,7 +96,7 @@ export default function GoalListScreen({ navigation }) {
   }
   useEffect(() => {
     getFriendsList();
-  }, []);
+  }, [user.id]);
 
   // update date picker
   useEffect(() => {

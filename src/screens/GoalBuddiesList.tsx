@@ -277,7 +277,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
   };
 
   return (
-    <Column>
+    <Column style={{ padding: 4 }}>
       {renderSearchInput()}
       {renderSearchedUsers()}
       {renderFriendsList()}

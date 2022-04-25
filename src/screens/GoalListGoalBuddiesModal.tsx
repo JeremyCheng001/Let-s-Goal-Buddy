@@ -461,7 +461,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   };
 
   return (
-    <Column style={{ padding: 10 }}>
+    <Column style={{ padding: 4 }}>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
 

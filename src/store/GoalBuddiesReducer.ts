@@ -47,7 +47,11 @@ export const goalBuddiesSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { resetGoalBuddiesReducer, setFriendships, addFriendship,deleteFriendship } =
-  goalBuddiesSlice.actions;
+export const {
+  resetGoalBuddiesReducer,
+  setFriendships,
+  addFriendship,
+  deleteFriendship,
+} = goalBuddiesSlice.actions;
 
 export default goalBuddiesSlice.reducer;

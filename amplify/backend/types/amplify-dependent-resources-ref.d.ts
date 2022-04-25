@@ -18,5 +18,11 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientIDWeb": "string",
             "AppClientID": "string"
         }
+    },
+    "storage": {
+        "letsgoalbuddy": {
+            "BucketName": "string",
+            "Region": "string"
+        }
     }
 }

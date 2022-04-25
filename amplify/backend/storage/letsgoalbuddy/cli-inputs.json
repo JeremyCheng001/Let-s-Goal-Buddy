@@ -1,0 +1,14 @@
+{
+  "resourceName": "letsgoalbuddy",
+  "policyUUID": "64f03ad8",
+  "bucketName": "letsgoalbuddyd4571583d8b54a459495a59560a2cf5d",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

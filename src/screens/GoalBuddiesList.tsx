@@ -14,7 +14,7 @@ import { trim } from "lodash";
 import * as React from "react";
 import { FunctionComponent, useState } from "react";
 import { View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   CreateFriendShipInput,
   DeleteFriendShipMutation,
@@ -26,6 +26,7 @@ import Column from "../components/Column";
 import Row from "../components/Row";
 import { createFriendShip, deleteFriendShip } from "../graphql/mutations";
 import { listUsers } from "../graphql/queries";
+import { useUserAvatar } from "../hooks/UserHooks";
 import { RootState } from "../store/store";
 
 interface GoalBuddiesListProps {}
@@ -39,13 +40,23 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
     (state: RootState) => state.goalBuddiesReducer.friendships
   );
 
-  const renderUserAvatar = (props: any) => (
-    <Avatar
-      {...props}
-      style={[props.style, { tintColor: null }]}
-      source={{ uri: "https://picsum.photos/200" }}
-    />
-  );
+  const { getUserAvatar } = useUserAvatar();
+
+  const renderUserAvatar = (userID: string) => {
+    getUserAvatar(userID);
+    const userAvatars = useSelector(
+      (state: RootState) => state.userReducer.userAvatars
+    );
+    const userAvatar = userAvatars[userID];
+
+    return (
+      <Avatar
+        source={{
+          uri: userAvatar ? userAvatar.s3ImageURL : "https://picsum.photos/200",
+        }}
+      />
+    );
+  };
 
   async function handleDeleteFriend(friendship: FriendShip) {
     (await API.graphql(
@@ -70,13 +81,15 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
         key={index}
         title={item.title}
         description={item.description}
-        accessoryLeft={renderUserAvatar}
-        accessoryRight={
+        accessoryLeft={() => renderUserAvatar(item.userID)}
+        accessoryRight={() => (
           <Button
-            accessoryLeft={<Icon name="trash-2-outline" />}
             onPress={() => handleDeleteFriend(item.friendship)}
-          />
-        }
+            size={"small"}
+          >
+            remove
+          </Button>
+        )}
       />
     );
   };
@@ -178,12 +191,12 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
         key={index}
         title={item.title}
         description={item.description}
-        accessoryLeft={renderUserAvatar}
+        accessoryLeft={() => renderUserAvatar(item.userID)}
         accessoryRight={() => (
           <Button
             disabled={userHasBeenAdded || user.id === item.userID}
             onPress={() => handleAddFriend(item.userID)}
-            size="tiny"
+            size="small"
           >
             Add
           </Button>

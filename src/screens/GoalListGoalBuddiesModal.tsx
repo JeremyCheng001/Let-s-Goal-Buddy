@@ -38,6 +38,7 @@ import {
   onCreateGoalBuddyGoalLists,
   onDeleteGoalBuddyGoalLists,
 } from "../graphql/subscriptions";
+import { useUserAvatar } from "../hooks/UserHooks";
 import { RootState } from "../store/store";
 
 interface GoalListGoalBuddiesModalProps {}
@@ -61,6 +62,8 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   const [goalBuddyGoalLists, setGoalBuddyGoalLists] = useState<
     GoalBuddyGoalLists[]
   >([]);
+
+  const { getUserAvatar } = useUserAvatar();
 
   async function handleAddFriend(friendUserID: string) {
     let createFriendShipInput: CreateFriendShipInput = {
@@ -94,25 +97,25 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     ).subscribe({
       next: ({ provider, value }: any) => {
         const createdGoalBuddyGoalList = value.data.onCreateGoalBuddyGoalLists;
-        
+
         if (selectedGoalList) {
           if (createdGoalBuddyGoalList.goalListID === selectedGoalList.id) {
             setGoalBuddyGoalLists((prevState: GoalBuddyGoalLists[]) => {
               let updatedGoalBuddyGoalLists = [...prevState];
               updatedGoalBuddyGoalLists.push(createdGoalBuddyGoalList);
-              
+
               return updatedGoalBuddyGoalLists;
             });
-            
+
             if (friendships) {
               // add this new goal buddy to the friends list, that way user can easily add this friend to other goal lists (without doing search over and over)
               let goalBuddyAlreadyInFriendsList =
-              friendships.findIndex(
-                (friendship) =>
-                friendship.friendShipFriendId ===
-                createdGoalBuddyGoalList.user.id
+                friendships.findIndex(
+                  (friendship) =>
+                    friendship.friendShipFriendId ===
+                    createdGoalBuddyGoalList.user.id
                 ) > -1;
-                if (!goalBuddyAlreadyInFriendsList) {
+              if (!goalBuddyAlreadyInFriendsList) {
                 handleAddFriend(createdGoalBuddyGoalList.user.id);
               }
             }
@@ -192,13 +195,21 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     }
   }
 
-  const renderUserAvatar = (props: any) => (
-    <Avatar
-      {...props}
-      style={[props.style, { tintColor: null }]}
-      source={{ uri: "https://picsum.photos/200" }}
-    />
-  );
+  const renderUserAvatar = (userID: string) => {
+    getUserAvatar(userID);
+    const userAvatars = useSelector(
+      (state: RootState) => state.userReducer.userAvatars
+    );
+    const userAvatar = userAvatars[userID];
+
+    return (
+      <Avatar
+        source={{
+          uri: userAvatar ? userAvatar.s3ImageURL : "https://picsum.photos/200",
+        }}
+      />
+    );
+  };
 
   const renderGoalBuddyItem = ({
     item,
@@ -217,7 +228,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         key={index}
         title={item.title}
         description={item.description}
-        accessoryLeft={renderUserAvatar}
+        accessoryLeft={() => renderUserAvatar(item.userID)}
         accessoryRight={
           <Button
             accessoryLeft={<Icon name="trash-2-outline" />}
@@ -334,7 +345,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         key={index}
         title={item.title}
         description={item.description}
-        accessoryLeft={renderUserAvatar}
+        accessoryLeft={() => renderUserAvatar(item.userID)}
         accessoryRight={
           <Button
             accessoryLeft={<Icon name="person-add-outline" />}
@@ -406,7 +417,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
         key={index}
         title={item.title}
         description={item.description}
-        accessoryLeft={renderUserAvatar}
+        accessoryLeft={() => renderUserAvatar(item.userID)}
         accessoryRight={() => (
           <Button
             size={"tiny"}

@@ -249,7 +249,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       if (goalBuddyGoalList) {
         data.push({
           title: goalBuddyGoalList.user.name,
-          description: `${goalBuddyGoalList.user.appID} (${goalBuddyGoalList.user.motto})`,
+          description: `${goalBuddyGoalList.user.appID}`,
           userID: goalBuddyGoalList.user.id,
           goalBuddyGoalListID: goalBuddyGoalList.id,
         });
@@ -364,7 +364,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       if (user) {
         data.push({
           title: user.name,
-          description: `${user.appID} (${user.motto}) (${user.id})`,
+          description: `${user.appID}`,
           userID: user.id,
         });
       }
@@ -440,7 +440,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
     for (let friendship of friendships) {
       data.push({
         title: friendship.friend.name,
-        description: `${friendship.friend.appID} (${friendship.friend.motto})`,
+        description: `${friendship.friend.appID}`,
         userID: friendship.friend.id,
         friendship: friendship,
       });

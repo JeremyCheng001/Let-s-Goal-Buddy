@@ -7,7 +7,7 @@ import {
   Input,
   List,
   ListItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
@@ -21,7 +21,7 @@ import {
   FriendShip,
   ListFriendShipsQuery,
   ListUsersQuery,
-  User
+  User,
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
@@ -42,7 +42,6 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
   const friendships: FriendShip[] | null = useSelector(
     (state: RootState) => state.goalBuddiesReducer.friendships
   );
-
 
   async function getFriendsList() {
     let friendships_: FriendShip[] = [];
@@ -126,7 +125,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
     for (let friendship of friendships) {
       data.push({
         title: friendship.friend.name,
-        description: `${friendship.friend.appID} (${friendship.friend.motto})`,
+        description: `${friendship.friend.appID}`,
         userID: friendship.friend.id,
         friendship: friendship,
       });
@@ -239,7 +238,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
       if (user) {
         data.push({
           title: user.name,
-          description: `${user.appID} (${user.motto})`,
+          description: `${user.appID}`,
           userID: user.id,
         });
       }

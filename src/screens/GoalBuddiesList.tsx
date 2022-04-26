@@ -7,33 +7,34 @@ import {
   Input,
   List,
   ListItem,
-  Text,
+  Text
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
 import * as React from "react";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CreateFriendShipInput,
   DeleteFriendShipMutation,
   FriendShip,
-  ListFriendShipsQuery,
-  ListUsersQuery,
-  User,
+  ListFriendShipsQuery, ListUsersQuery,
+  User
 } from "../API";
 import Column from "../components/Column";
 import Row from "../components/Row";
 import { createFriendShip, deleteFriendShip } from "../graphql/mutations";
-import { listFriendShips, listUsers } from "../graphql/queries";
+import {
+  listFriendShips, listUsers
+} from "../graphql/queries";
 import { useUserAvatar } from "../hooks/UserHooks";
 import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
 import { RootState } from "../store/store";
 
 interface GoalBuddiesListProps {}
-
-const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
+//@ts-ignore
+const GoalBuddiesList: FunctionComponent = ({ navigation }) => {
   const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.userReducer);
   const [searchUserID, setSearchUserID] = useState<string>("");
@@ -42,6 +43,10 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
   const friendships: FriendShip[] | null = useSelector(
     (state: RootState) => state.goalBuddiesReducer.friendships
   );
+
+  useEffect(() => {
+    dispatch(GoalBuddiesReducer.fetchGoalBuddiesGoalLists(user.id));
+  }, []);
 
   async function getFriendsList() {
     let friendships_: FriendShip[] = [];
@@ -64,7 +69,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
     dispatch(GoalBuddiesReducer.setFriendships(friendships_));
   }
 
-  const { getUserAvatar } = useUserAvatar();
+  const { getUserAvatar, userAvatar } = useUserAvatar();
 
   const renderUserAvatar = (userID: string) => {
     getUserAvatar(userID);
@@ -114,9 +119,20 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
             remove
           </Button>
         )}
+        onPress={() => {
+          dispatch(
+            GoalBuddiesReducer.setSelectedGoalBuddy(item.friendship.friend)
+          );
+          navigation.push("GoalBuddyGoalLists");
+        }}
       />
     );
   };
+
+  const handleRefresh = ()=>{
+    getFriendsList();
+    dispatch(GoalBuddiesReducer.fetchGoalBuddiesGoalLists(user.id));
+  }
 
   const renderFriendsList = () => {
     if (!friendships) return null;
@@ -140,7 +156,7 @@ const GoalBuddiesList: FunctionComponent<GoalBuddiesListProps> = () => {
           data={data}
           ItemSeparatorComponent={Divider}
           renderItem={renderFriendItem}
-          onRefresh={getFriendsList}
+          onRefresh={handleRefresh}
           refreshing={false}
         />
       </Column>

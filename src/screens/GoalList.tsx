@@ -111,8 +111,8 @@ export default function GoalListScreen({ navigation }) {
         endDate_ = moment(date);
         break;
       case 1:
-        startDate_ = moment(date).startOf("week");
-        endDate_ = moment(date).endOf("week");
+        startDate_ = moment(date).startOf("isoWeek"); // start week on Monday
+        endDate_ = moment(date).endOf("isoWeek");
         break;
       case 2:
         startDate_ = moment(date).startOf("month");

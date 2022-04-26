@@ -7,7 +7,7 @@ import {
   Input,
   List,
   ListItem,
-  Text,
+  Text
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { StatusBar } from "expo-status-bar";
@@ -24,19 +24,20 @@ import {
   GoalList,
   ListGoalBuddyGoalListsQuery,
   ListUsersQuery,
-  User,
+  User
 } from "../API";
 import Column from "../components/Column";
+import CustomDivider from "../components/CustomDivider";
 import Row from "../components/Row";
 import {
   createFriendShip,
   createGoalBuddyGoalLists,
-  deleteGoalBuddyGoalLists,
+  deleteGoalBuddyGoalLists
 } from "../graphql/mutations";
 import { listGoalBuddyGoalLists, listUsers } from "../graphql/queries";
 import {
   onCreateGoalBuddyGoalLists,
-  onDeleteGoalBuddyGoalLists,
+  onDeleteGoalBuddyGoalLists
 } from "../graphql/subscriptions";
 import { useUserAvatar } from "../hooks/UserHooks";
 import { RootState } from "../store/store";
@@ -382,16 +383,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
   };
 
   const renderDivider = () => {
-    return (
-      <Divider
-        style={{
-          width: "100%",
-          height: 2,
-          marginBottom: 8,
-          backgroundColor: "#9f9f9f",
-        }}
-      />
-    );
+    return <CustomDivider />;
   };
 
   const renderFriendItem = ({

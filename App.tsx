@@ -22,7 +22,12 @@ import {
   animals,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { CreateUserInput, CreateUserMutation, GetUserQuery, User } from "./src/API";
+import {
+  CreateUserInput,
+  CreateUserMutation,
+  GetUserQuery,
+  User,
+} from "./src/API";
 import awsconfig from "./src/aws-exports";
 import { View } from "./src/components/Themed";
 import { createUser } from "./src/graphql/mutations";

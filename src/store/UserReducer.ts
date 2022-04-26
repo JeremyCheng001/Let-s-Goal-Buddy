@@ -18,6 +18,7 @@ const initialState: UserState = {
   createdAt: "",
   updatedAt: "",
   userAvatars: {},
+  goalBuddyGoalLists: null,
 };
 
 export const counterSlice = createSlice({
@@ -28,8 +29,16 @@ export const counterSlice = createSlice({
       return { ...initialState };
     },
     setUser: (state, action: PayloadAction<User>) => {
-      const { id, appID, name, motto, imageUrl, createdAt, updatedAt } =
-        action.payload;
+      const {
+        id,
+        appID,
+        name,
+        motto,
+        imageUrl,
+        createdAt,
+        updatedAt,
+        goalBuddyGoalLists,
+      } = action.payload;
       state.id = id;
       state.appID = appID;
       state.name = name;
@@ -37,6 +46,7 @@ export const counterSlice = createSlice({
       state.imageUrl = imageUrl;
       state.createdAt = createdAt;
       state.updatedAt = updatedAt;
+      state.goalBuddyGoalLists = goalBuddyGoalLists;
     },
     setUserAvatar: (state, action: PayloadAction<UserAvatar>) => {
       const { userID } = action.payload;

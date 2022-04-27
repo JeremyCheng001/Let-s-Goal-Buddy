@@ -17,11 +17,16 @@ import * as GoalListReducer from "../store/GoalListReducer";
 import { RootState } from "../store/store";
 import styled from "styled-components";
 import Slider from "@ptomasroos/react-native-multi-slider";
+import * as Progress from "react-native-progress";
 interface GoalDetailsProps {}
 
 // @ts-ignore
-const GoalDetails: FunctionComponent<GoalDetailsProps> = ({ navigation }) => {
+const GoalDetails: FunctionComponent<GoalDetailsProps> = (props: any) => {
   const dispatch = useDispatch();
+
+  const params = props.route.params;
+  const editable: boolean | undefined = params?.editable || undefined;
+
   const selectedGoal: Goal | null = useSelector(
     (state: RootState) => state.goalListReducer.selectedGoal
   );
@@ -67,7 +72,7 @@ const GoalDetails: FunctionComponent<GoalDetailsProps> = ({ navigation }) => {
             dispatch(
               GoalListReducer.setDeletedGoal(deletedGoal.data.deleteGoal.id)
             );
-            navigation.goBack();
+            props.navigation.goBack();
           }
         },
       },
@@ -80,36 +85,66 @@ const GoalDetails: FunctionComponent<GoalDetailsProps> = ({ navigation }) => {
     <Column>
       <Row style={{ padding: 4 }}>
         <Label>Title:</Label>
-        <Input
-          value={title}
-          style={{ marginLeft: 4, flex: 1 }}
-          onChangeText={(text) => setTitle(text)}
-          onBlur={handleSaveGoal}
-        />
+        {editable ? (
+          <Input
+            value={title}
+            style={{ marginLeft: 4, flex: 1 }}
+            onChangeText={(text) => setTitle(text)}
+            onBlur={handleSaveGoal}
+          />
+        ) : (
+          <Text category={"s1"} style={{ marginLeft: 4 }}>
+            {title}
+          </Text>
+        )}
       </Row>
       <Row style={{ padding: 4 }}>
         <Label>Description:</Label>
-        <Input
-          value={description}
-          style={{ marginLeft: 4, flex: 1, maxHeight: 100 }}
-          onChangeText={(text) => setDescription(text)}
-          placeholder={description ? "" : "None"}
-          multiline={true}
-          blurOnSubmit
-          onEndEditing={handleSaveGoal}
-        />
-      </Row>
-      <Row style={{ padding: 4, paddingTop: 0, paddingBottom: 0 }}>
-        <Label>Progress:</Label>
-        <Row style={{ marginLeft: 20 }}>
-          <Slider
-            max={100}
-            values={[progress]}
-            onValuesChange={(values) => setProgress(values[0])}
-            onValuesChangeFinish={handleSaveGoal}
+        {editable ? (
+          <Input
+            value={description}
+            style={{ marginLeft: 4, flex: 1, maxHeight: 100 }}
+            onChangeText={(text) => setDescription(text)}
+            placeholder={description ? "" : "None"}
+            multiline={true}
+            blurOnSubmit
+            onEndEditing={handleSaveGoal}
           />
-        </Row>
-        <Label style={{ marginLeft: 16, fontSize: 18 }}>{progress}</Label>
+        ) : (
+          <Text
+            category={"p1"}
+            style={{ marginLeft: 4, marginRight: 80, marginVertical: 20 }}
+          >
+            {description || `(None)`}
+          </Text>
+        )}
+      </Row>
+      <Row
+        style={{ padding: 4, paddingTop: 8, paddingBottom: 0, width: "100%" }}
+      >
+        <Label>Progress:</Label>
+        {editable ? (
+          <Row>
+            <Row style={{ marginLeft: 10 }}>
+              <Slider
+                max={100}
+                values={[progress]}
+                onValuesChange={(values) => setProgress(values[0])}
+                onValuesChangeFinish={handleSaveGoal}
+              />
+            </Row>
+            <Label style={{ marginLeft: 16, fontSize: 18 }}>{progress}</Label>
+          </Row>
+        ) : (
+          <Row>
+            <Progress.Bar
+              progress={(selectedGoal?.progress || 0) / 100}
+              width={100}
+              style={{ marginLeft: 8, marginRight: 4 }}
+            />
+            <Label>{`${selectedGoal?.progress || 0}%`}</Label>
+          </Row>
+        )}
       </Row>
       <Row
         style={{
@@ -118,13 +153,15 @@ const GoalDetails: FunctionComponent<GoalDetailsProps> = ({ navigation }) => {
           justifyContent: "flex-end",
         }}
       >
-        <Pressable onPress={handleDeleteGoal}>
-          <Icon
-            style={{ width: 32, height: 32 }}
-            name="trash-2-outline"
-            fill="#d7353d"
-          />
-        </Pressable>
+        {editable && (
+          <Pressable onPress={handleDeleteGoal}>
+            <Icon
+              style={{ width: 32, height: 32 }}
+              name="trash-2-outline"
+              fill="#d7353d"
+            />
+          </Pressable>
+        )}
       </Row>
       <Row style={{ padding: 4 }}>
         <Divider

@@ -276,7 +276,7 @@ export default function GoalListScreen({ navigation }) {
   function handleNavigateToGoalDetailsScreen(goal: Goal | null) {
     if (goal) {
       dispatch(GoalListReducer.setSelectedGoal(goal));
-      navigation.push("Goal Details");
+      navigation.push("GoalDetails", { editable: true });
     }
   }
 

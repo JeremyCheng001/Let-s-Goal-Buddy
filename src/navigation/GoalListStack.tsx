@@ -36,7 +36,7 @@ export default function GoalListStackScreen({ navigation }) {
         }}
       />
       <GoalListStack.Screen
-        name="Goal Details"
+        name="GoalDetails"
         component={GoalDetails}
         options={{
           headerRight: () => (

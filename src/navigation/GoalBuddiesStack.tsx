@@ -4,6 +4,7 @@ import GoalBuddiesList from "../screens/GoalBuddiesList";
 import GoalBuddyGoalList from "../screens/GoalBuddyGoalList";
 import GoalBuddyGoalLists from "../screens/GoalBuddyGoalLists";
 import GoalBuddyGroupedGoalLists from "../screens/GoalBuddyGroupedGoalLists";
+import GoalDetails from "../screens/GoalDetails";
 
 const GoalBuddiesStack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export default function GoalBuddiesStackScreen() {
           headerTitle: "Goal Buddy's Goal List", // to overwrite the header title, otherwise it would be the same as "name" by default
         })}
       />
+      <GoalBuddiesStack.Screen name="GoalDetails" component={GoalDetails} />
     </GoalBuddiesStack.Navigator>
   );
 }

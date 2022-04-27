@@ -12,12 +12,15 @@ import Row from "../components/Row";
 import * as Progress from "react-native-progress";
 import styled from "styled-components";
 import { getGoalList } from "../graphql/queries";
+import { useDispatch } from "react-redux";
+import * as GoalListReducer from "../store/GoalListReducer";
 
 interface GoalBuddyGoalListProps {}
 
 const GoalBuddyGoalList: FunctionComponent<GoalBuddyGoalListProps> = (
   props: any
 ) => {
+  const dispatch = useDispatch();
   const params = props.route.params;
   const headerTitle: string = params.headerTitle;
   const subTitle: string = params.subTitle;
@@ -37,6 +40,13 @@ const GoalBuddyGoalList: FunctionComponent<GoalBuddyGoalListProps> = (
       if (getGoalListQuery.data?.getGoalList) {
         setGoalList(getGoalListQuery.data.getGoalList as GoalList);
       }
+    }
+  };
+
+  const handleNavigateToGoalDetailsScreen = (goal: Goal | null) => {
+    if (goal) {
+      dispatch(GoalListReducer.setSelectedGoal(goal));
+      props.navigation.push("GoalDetails", {});
     }
   };
 
@@ -78,13 +88,10 @@ const GoalBuddyGoalList: FunctionComponent<GoalBuddyGoalListProps> = (
                 fillColor="black"
                 unfillColor="#FFFFFF"
                 iconStyle={{ borderColor: "black", borderRadius: 5 }}
-                // onPress={(isChecked: boolean) =>
-                //   handleCompleteGoal(goal, isChecked)
-                // }
               />
               <Pressable
                 style={{ flex: 1 }}
-                // onPress={() => handleNavigateToGoalDetailsScreen(goal)}
+                onPress={() => handleNavigateToGoalDetailsScreen(goal)}
               >
                 <Row style={{ justifyContent: "space-between" }}>
                   <Text
@@ -150,11 +157,9 @@ const GoalBuddyGoalList: FunctionComponent<GoalBuddyGoalListProps> = (
     return null;
   }
   return (
-    <View style={{ padding: 20, flex: 1, height: "100%" }}>
+    <View style={{ padding: 10, flex: 1, height: "100%", marginTop: 10 }}>
       {renderEmptyState()}
-      {/* <View style={{ flex: 1 }}> */}
       {renderGoalList()}
-      {/* </View> */}
     </View>
   );
 };

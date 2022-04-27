@@ -82,7 +82,7 @@ function App(props: any) {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  // const dispatch = useDispatch(); // test 2
+  // const dispatch = useDispatch(); // test 3
 
   const {
     oAuthUser,

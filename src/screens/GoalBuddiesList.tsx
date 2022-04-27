@@ -277,7 +277,7 @@ const GoalBuddiesList: FunctionComponent = ({ navigation }) => {
       <Row style={{ width: "100%", marginTop: 8 }}>
         <Input
           style={{ flex: 1 }}
-          placeholder="Enter user ID to add Goal Buddy"
+          placeholder="Enter User ID"
           value={searchUserID}
           onChangeText={handleChangeSearchUserID}
         />

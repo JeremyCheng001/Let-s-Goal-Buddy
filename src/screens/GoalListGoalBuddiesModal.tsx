@@ -297,7 +297,7 @@ const GoalListGoalBuddiesModal: FunctionComponent<
       <Row style={{ width: "100%" }}>
         <Input
           style={{ flex: 1 }}
-          placeholder="Enter user ID here"
+          placeholder="Enter User ID"
           value={searchUserID}
           onChangeText={handleChangeSearchUserID}
         />

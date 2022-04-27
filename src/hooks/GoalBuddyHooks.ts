@@ -119,8 +119,8 @@ function isThisMonthGoalList(goalList: GoalList) {
 
 function isThisYearGoalList(goalList: GoalList) {
   const date = moment(new Date());
-  const startOfYear = date.startOf("month").format("yyyy-MM-DD");
-  const endOfYear = date.endOf("month").format("yyyy-MM-DD");
+  const startOfYear = date.startOf("year").format("yyyy-MM-DD");
+  const endOfYear = date.endOf("year").format("yyyy-MM-DD");
 
   if (goalList.type === 3) {
     if (goalList.startDate === startOfYear && goalList.endDate === endOfYear) {

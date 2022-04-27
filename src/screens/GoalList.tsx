@@ -7,7 +7,7 @@ import {
   Input,
   Select,
   SelectItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
 import { API, graphqlOperation } from "aws-amplify";
 import { trim } from "lodash";
@@ -31,14 +31,14 @@ import {
   ListGoalListsQuery,
   UpdateGoalInput,
   UpdateGoalMutation,
-  User
+  User,
 } from "../API";
 import Row from "../components/Row";
 import { createGoal, createGoalList, updateGoal } from "../graphql/mutations";
 import {
   getGoalList,
   listFriendShips,
-  listGoalLists
+  listGoalLists,
 } from "../graphql/queries";
 import { useFriendshipSubscription } from "../hooks/SubscriptionHooks";
 import * as GoalBuddiesReducer from "../store/GoalBuddiesReducer";
